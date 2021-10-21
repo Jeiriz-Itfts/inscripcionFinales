@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 # Aplicaciones instaladas
 INSTALLED_APPS = [
+    'inscripcionFinales.apps.InscripcionfinalesConfig', #le indicamos al proyecto que la app esta instalada
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
