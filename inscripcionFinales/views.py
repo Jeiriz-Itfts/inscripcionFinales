@@ -5,6 +5,13 @@ from django.utils import timezone
 from django.urls import reverse
 
 
+def index(request):
+    return render(request, 'inscripcionFinales/index.html')
+
+
+def reset(request):
+    return render(request, 'inscripcionFinales/reset.html')
+
 # def vote(request, question_id):
 #     question = get_object_or_404(Question, pk=question_id)
 #     try:

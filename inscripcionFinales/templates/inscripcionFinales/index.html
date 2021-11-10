@@ -1,0 +1,20 @@
+{% extends "inscripcionFinales/base.html" %}
+
+<!--
+Aca se mostrara la pantalla para logearse
+Ruta /
+-->
+
+
+
+{% block div %}
+<h2>Iniciar sesión</h2>
+<p>Coloque su DNI o su mail institucional, su contraseña y luego inicie sesión</p>
+<form action="">
+    <input type="text" name="correo" value="" placeholder="juan.eiriz@alu.ifts18.edu.ar"><br><br>
+    <input type="text" name="contraseña" value="" placeholder="Contraseña"><br><br>
+    <button type="submit" name="enviar" value="">Iniciar sesión</button><br>
+    <a href="/inscripcionFinales/reset">Restablecer contraseña</a>
+</form>
+
+{% endblock %}
