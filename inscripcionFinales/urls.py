@@ -5,7 +5,7 @@ from . import views
 app_name = 'inscripcionFinales'
 urlpatterns = [
     path('',views.index,name='index'),
-    path('reset', views.reset, name='reset'),
+    path('reset/', views.reset, name='reset'),
     path('usuario/<int:usuario_id>/', views.get_id, name='get_id'),
     path('insertarUsr/', views.insertar_usr, name='insertar_usr'),
     path('usuarios/',views.get_usrs,name='get_usrs'),

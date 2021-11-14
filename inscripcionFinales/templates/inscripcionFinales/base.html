@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
@@ -9,26 +9,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
     <!--Boostrap-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!--Css-->
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'inscripcionFinales/styles.css' %}">
 </head>
-<body>
-{% block body %}
-<nav>
-    {% block nav %}
-    {% load static %}
-    <img src="{% static 'inscripcionFinales/ifts.jpg' %}" alt="" width="70px">
-    <h1 class="titulo">Sistema de inscripción a finales </h1>
-    <hr>
-    {% endblock %}
-</nav>
-<div>{% block div %}{% endblock %}</div>
-<footer>{% block footer %}{% endblock %}</footer>
 
-<!--Javascript-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-{% endblock %}
+<body>
+    {% block body %}
+    <nav>
+        {% block nav %}
+        {% load static %}
+        <a href=""><img src="{% static 'inscripcionFinales/ifts.jpg' %}" alt="" width="70px"></a>
+        <h1 class="titulo">Sistema de inscripción a finales </h1>
+        <hr>
+        {% endblock %}
+    </nav>
+    <div>{% block div %}{% endblock %}</div>
+    <footer>{% block footer %}{% endblock %}</footer>
+
+    <!--Javascript-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
+    {% endblock %}
 </body>
+
 </html>

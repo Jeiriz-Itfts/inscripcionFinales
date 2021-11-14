@@ -1,3 +1,8 @@
 .idea
 migrations
-inscripcionFinales/__pycache__
+inscripcionFinales/__pycache__/
+.vscode/
+.venv/
+db.sqlite3
+djangoEnvInscripcion
+inscripcionFinales/templates/inscripcionFinales/workspace.code-workspace

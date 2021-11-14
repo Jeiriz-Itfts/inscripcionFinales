@@ -2,37 +2,47 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
 from .models import Usuario
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 from django.urls import reverse
+from django.core.mail import send_mail
+from django.views.decorators.csrf import csrf_exempt
+from django.template.context import RequestContext
+from django import forms
+from .forms import EmailForm
+
+def check_if_mail_exists_and_send_mail(request):
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            form.save()
+            email = form.cleaned_data.get('email')
+            email = form.cleaned_data['email']
+            return render(request, 'index.html', {'email': email})
+            # email = request.GET['email']
+            # if email:
+            #     if Usuario.objects.filter(email=email).exists():
+            #         newPassword=get_random_string(lengh=20)
+            #         send_mail(
+            #             'IFTS 18 - Reseteo automático de contraseña',
+            #             'Se ha creado una nueva contraseña: %s' % newPassword,
+            #             'noreply@ifts18.com'
+            #             [email],
+            #             fail_silently=False,
+            #             )
+            #     else:
+            #         return HttpResponse("El correo no se encuentra registrado!")
+        else:
+            return HttpResponse("No se ha ingresado un correo")
+    else:
+        form = EmailForm()
+        return render(request, 'index.html', {'form': form})
 
 
 def index(request):
     return render(request, 'inscripcionFinales/index.html')
 
-
 def reset(request):
     return render(request, 'inscripcionFinales/reset.html')
-
-# def vote(request, question_id):
-#     question = get_object_or_404(Question, pk=question_id)
-#     try:
-#         selected_choice = question.choice_set.get(pk=request.POST['choice'])
-#     except (KeyError, Choice.DoesNotExist):
-#         # Redisplay the question voting form.
-#         return render(request, 'polls/detail.html', {
-#             'question': question,
-#             'error_message': "You didn't select a choice.",
-#         })
-#     else:
-#         selected_choice.votes += 1
-#         selected_choice.save()
-#         # Always return an HttpResponseRedirect after successfully dealing
-#         # with POST data. This prevents data from being posted twice if a
-#         # user hits the Back button.
-# Después de incrementar el conteo de la elección, el código retorna una HttpResponseRedirect en lugar de una HttpResponse normal HttpResponseRedirect toma un único argumento: La URL a la que el usuario será redirigido (vea el siguiente aspecto de cómo construimos la URL en este caso).
-#
-# As the Python comment above points out, you should always return an HttpResponseRedirect after successfully dealing with POST data. This tip isn’t specific to Django; it’s good Web development practice in general.
-#
-# Estamos utilizando la función reverse() en el constructor HttpResponseRedirect en este ejemplo. Esta función ayuda a evitar tener que codificar una URL en la función de vista. Se proporciona el nombre de la vista a la que queremos pasar el control y la parte de la variable del patrón de URL que señala esa vista. En este caso, utilizando la URLconf que configuramos en el Tutorial 3, esta llamada reverse() retornará una cadena como
 
 def probar_excepcion(request,usuario_id):
     usuarios = get_object_or_404(Usuario, pk=usuario_id) #toma un modelo y numero de arg

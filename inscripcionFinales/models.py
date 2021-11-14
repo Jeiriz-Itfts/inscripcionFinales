@@ -7,10 +7,12 @@ from django.contrib import admin
 # Create your models here.
 # Tantos modelos como tablas
 
+
 class Usuario(models.Model):
     uid = models.CharField(max_length=200)
     password = models.CharField(max_length=200)
     fecha_creacion = models.DateTimeField('Fecha creación')
+    mail = models.EmailField(max_length=254)
 
     @admin.display(  # decorador para cambiar formatos, textos, tipos de datos, no funca
         boolean=True,
@@ -44,7 +46,6 @@ class Directivo(models.Model):
     nombre = models.CharField(max_length=200)
     apellido = models.CharField(max_length=200)
     dni = models.CharField(max_length=200)
-    mail = models.EmailField(max_length=254)
 
     def __str__(self):
         return self.dni
@@ -54,7 +55,6 @@ class Administradores(models.Model):
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=200)
     apellido = models.CharField(max_length=200)
-    mail = models.EmailField(max_length=254)
 
 
 class Curso(models.Model):
@@ -68,7 +68,6 @@ class Alumno(models.Model):
     apellido = models.CharField(max_length=200)
     legajo = models.CharField(max_length=200)
     dni = models.CharField(max_length=200)
-    mail = models.EmailField(max_length=254)
 
 
 class Materia(models.Model):
