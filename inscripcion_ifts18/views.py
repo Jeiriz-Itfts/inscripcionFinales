@@ -39,15 +39,15 @@ def check_if_mail_exists_and_send_mail(request):
 
 
 def index(request):
-    return render(request, 'inscripcionFinales/index.html')
+    return render(request, 'inscripcion_ifts18/index.html')
 
 def reset(request):
-    return render(request, 'inscripcionFinales/reset.html')
+    return render(request, 'inscripcion_ifts18/reset.html')
 
 def probar_excepcion(request,usuario_id):
     usuarios = get_object_or_404(Usuario, pk=usuario_id) #toma un modelo y numero de arg
     context = {'usuarios': usuarios} #diccionario para pasarle al template
-    return render(request, 'inscripcionFinales/usersPlantilla.html',context)
+    return render(request, 'inscripcion_ifts18/usersPlantilla.html',context)
 
 
 def users_plantilla(request):
@@ -56,7 +56,7 @@ def users_plantilla(request):
         context = {'usuarios': usuarios} #diccionario para pasarle al template
     except Usuario.DoesNotExist:
         raise Http404("No existe el usuario")
-    return render(request, 'inscripcionFinales/usersPlantilla.html',context) #el render toma el objeto, nombre plantilla, y diccionario, retorna un Httpresponse
+    return render(request, 'inscripcion_ifts18/usersPlantilla.html',context) #el render toma el objeto, nombre plantilla, y diccionario, retorna un Httpresponse
 
 # path('usuario/', views.insertarUsr, name='insertarUsr'),
 def insertar_usr(request):

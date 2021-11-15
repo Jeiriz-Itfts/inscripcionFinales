@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class InscripcionfinalesConfig(AppConfig):
+class InscripcionIfts18Config(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'inscripcionFinales'
+    name = 'inscripcion_ifts18'

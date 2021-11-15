@@ -1,4 +1,4 @@
-"""miProyecto URL Configuration
+"""inscripcion_finales URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -14,11 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-
+from django.urls import include, path
 
 urlpatterns = [
     #     ruta(url) view(luego de la ruta, se dirige a la vista, podes pasarle argumentos) y dos argumentos iopcionales (kwargs[diccionario], name [nombre a la url] )
     path('admin/', admin.site.urls),
-    path('inscripcionFinales/', include('inscripcionFinales.urls')), #el include hace referencia a otras url
+    path('inscripcion_ifts18/', include('inscripcion_ifts18.urls')), #el include hace referencia a otras url
 ]
