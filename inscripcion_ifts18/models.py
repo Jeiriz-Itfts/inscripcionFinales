@@ -14,25 +14,10 @@ class Usuario(models.Model):
     fecha_creacion = models.DateTimeField('Fecha creación')
     mail = models.EmailField(max_length=254)
 
-    @admin.display(  # decorador para cambiar formatos, textos, tipos de datos, no funca
-        boolean=True,
-        ordering='fecha_creacion',
-        description='asd asd?',
-    )
-    def __str__(self):
-        return self.uid
-
-    def was_published_recently(self):
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.fecha_creacion <= now
-
 
 class Rol(models.Model):
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     descripcion = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.descripcion
 
 
 class Permiso(models.Model):
@@ -46,10 +31,6 @@ class Directivo(models.Model):
     nombre = models.CharField(max_length=200)
     apellido = models.CharField(max_length=200)
     dni = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.dni
-
 
 class Administradores(models.Model):
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)

@@ -1,9 +1,12 @@
 .idea
 migrations
-inscripcionFinales/__pycache__/
+inscripcion_finales/__pycache__/
+inscripcion_ifts18/__pycache__/
 .vscode/
 .venv/
 db.sqlite3
 djangoEnvInscripcion
 inscripcionFinales/templates/inscripcionFinales/workspace.code-workspace
+inscripcion_finales/templates/inscripcion_ifts18/workspace.code-workspace
 miProyecto/__pycache__/
+

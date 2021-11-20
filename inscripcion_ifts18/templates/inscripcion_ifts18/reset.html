@@ -3,9 +3,9 @@
 {% block div %}
 <h2>Restablecer contraseña</h2> 
 <p>Ingrese su dni o correo institucional para restablecer la contraseña</p>
-<form action="/check_if_mail_exists_and_send_mail/" method="POST" name="emailform">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="button" value="Resetear">
+
+<form action="" method="POST">{% csrf_token %}
+    <input type="email" name="email" id="email" placeholder="juan.eiriz@alu.ifts18.edu.ar">
+    <input type="submit" value="Enviar contraseña" />
 </form>
 {% endblock %}

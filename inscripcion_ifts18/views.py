@@ -10,33 +10,33 @@ from django.template.context import RequestContext
 from django import forms
 from .forms import EmailForm
 
-def check_if_mail_exists_and_send_mail(request):
-    if request.method == 'POST':
-        form = EmailForm(request.POST)
-        if form.is_valid():
-            form.save()
-            email = form.cleaned_data.get('email')
-            email = form.cleaned_data['email']
-            return render(request, 'index.html', {'email': email})
-            # email = request.GET['email']
-            # if email:
-            #     if Usuario.objects.filter(email=email).exists():
-            #         newPassword=get_random_string(lengh=20)
-            #         send_mail(
-            #             'IFTS 18 - Reseteo automático de contraseña',
-            #             'Se ha creado una nueva contraseña: %s' % newPassword,
-            #             'noreply@ifts18.com'
-            #             [email],
-            #             fail_silently=False,
-            #             )
-            #     else:
-            #         return HttpResponse("El correo no se encuentra registrado!")
-        else:
-            return HttpResponse("No se ha ingresado un correo")
-    else:
-        form = EmailForm()
-        return render(request, 'index.html', {'form': form})
+# def check_if_mail_exists_and_send_mail(request):
+#     if request.method == 'POST':
+#         email = request.POST.get('email')
+#         return render(request, 'good.html')
+#         # email = request.GET['email']
+#         # if email:
+#         #     if Usuario.objects.filter(email=email).exists():
+#         #         newPassword=get_random_string(lengh=20)
+#         #         send_mail(
+#         #             'IFTS 18 - Reseteo automático de contraseña',
+#         #             'Se ha creado una nueva contraseña: %s' % newPassword,
+#         #             'noreply@ifts18.com'
+#         #             [email],
+#         #             fail_silently=False,
+#         #             )
+#         #     else:
+#         #         return HttpResponse("El correo no se encuentra registrado!")
+#     return render(request, 'inscripcion_ifts18/reset.html')
 
+def check(request):
+    if request.method == 'POST':
+        mail = request.POST.get('mail')
+        if Usuario.objects.filter(mail=mail).exists():
+            return render(request, 'inscripcion_ifts18/logged.html')
+        else:
+            return HttpResponse("El el nombre de usuario %s no existe" % mail)
+    return HttpResponse("Error, metodo get")
 
 def index(request):
     return render(request, 'inscripcion_ifts18/index.html')
@@ -44,39 +44,39 @@ def index(request):
 def reset(request):
     return render(request, 'inscripcion_ifts18/reset.html')
 
-def probar_excepcion(request,usuario_id):
-    usuarios = get_object_or_404(Usuario, pk=usuario_id) #toma un modelo y numero de arg
-    context = {'usuarios': usuarios} #diccionario para pasarle al template
-    return render(request, 'inscripcion_ifts18/usersPlantilla.html',context)
+# def probar_excepcion(request,usuario_id):
+#     usuarios = get_object_or_404(Usuario, pk=usuario_id) #toma un modelo y numero de arg
+#     context = {'usuarios': usuarios} #diccionario para pasarle al template
+#     return render(request, 'inscripcion_ifts18/usersPlantilla.html',context)
 
 
-def users_plantilla(request):
-    try:
-        usuarios = Usuario.objects.all() #pk=algo_id
-        context = {'usuarios': usuarios} #diccionario para pasarle al template
-    except Usuario.DoesNotExist:
-        raise Http404("No existe el usuario")
-    return render(request, 'inscripcion_ifts18/usersPlantilla.html',context) #el render toma el objeto, nombre plantilla, y diccionario, retorna un Httpresponse
+# def users_plantilla(request):
+#     try:
+#         usuarios = Usuario.objects.all() #pk=algo_id
+#         context = {'usuarios': usuarios} #diccionario para pasarle al template
+#     except Usuario.DoesNotExist:
+#         raise Http404("No existe el usuario")
+#     return render(request, 'inscripcion_ifts18/usersPlantilla.html',context) #el render toma el objeto, nombre plantilla, y diccionario, retorna un Httpresponse
 
 # path('usuario/', views.insertarUsr, name='insertarUsr'),
-def insertar_usr(request):
-    usuario = Usuario(uid="carlos", password="carlitos", fecha_creacion=timezone.now())
-    usuario.save()
-    return HttpResponse("Usuario creado: %s " % usuario.uid)
+# def insertar_usr(request):
+#     usuario = Usuario(uid="carlos", password="carlitos", fecha_creacion=timezone.now())
+#     usuario.save()
+#     return HttpResponse("Usuario creado: %s " % usuario.uid)
 
 # /usuarios
-def get_usrs(request):
-    usrsLista = Usuario.objects.all()
-    # usrsLista = Usuario.objects.filter(id=2)
-    usrsListaFinal = ', '.join([usuario.uid for usuario in usrsLista])
-    return HttpResponse(usrsListaFinal)
+# def get_usrs(request):
+#     usrsLista = Usuario.objects.all()
+#     # usrsLista = Usuario.objects.filter(id=2)
+#     usrsListaFinal = ', '.join([usuario.uid for usuario in usrsLista])
+#     return HttpResponse(usrsListaFinal)
 
 # Forma 1
 # Django permite muchas cosas, usar muchas vistas y devolver muchas cosas pero siempre se debe
 # retornar un httpresponse o http404
-def get_id(request, usuario_id):
-    response = "Estas buscando el usuario con uid %s."
-    return HttpResponse(response % usuario_id)
+# def get_id(request, usuario_id):
+#     response = "Estas buscando el usuario con uid %s."
+#     return HttpResponse(response % usuario_id)
 
 # Forma  2
 # def getUsr(request, usuario_id):
