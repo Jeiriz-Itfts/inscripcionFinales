@@ -2,41 +2,53 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
 from .models import Usuario
 from django.utils import timezone
-from django.utils.crypto import get_random_string
 from django.urls import reverse
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.template.context import RequestContext
 from django import forms
 from .forms import EmailForm
+import uuid
+from django.template.loader import get_template
+#get_template de template loader
 
-# def check_if_mail_exists_and_send_mail(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         return render(request, 'good.html')
-#         # email = request.GET['email']
-#         # if email:
-#         #     if Usuario.objects.filter(email=email).exists():
-#         #         newPassword=get_random_string(lengh=20)
-#         #         send_mail(
-#         #             'IFTS 18 - Reseteo automático de contraseña',
-#         #             'Se ha creado una nueva contraseña: %s' % newPassword,
-#         #             'noreply@ifts18.com'
-#         #             [email],
-#         #             fail_silently=False,
-#         #             )
-#         #     else:
-#         #         return HttpResponse("El correo no se encuentra registrado!")
-#     return render(request, 'inscripcion_ifts18/reset.html')
+def sendMail(mail):
+    template = get_template('inscripcion_ifts18/correo.html')
+    content = template.render({}) #esto hace que sea dinamico y pasarle un valor que permite utilizar en el template, esa vairable, ese valor que le paso
+
+    email = EmailMultiAlternatives(
+                  'IFTS 18 - Reseteo automático de contraseña',
+                  'Se ha creado una nueva contraseña',
+                  settings.EMAIL_HOST_USER,
+                  [mail]
+                  )
+    email.attach_alternative(content, "text/html") #atach el correo en el template html y el formato
+    email.send() #envia correo
+
+def check_if_mail_exists_and_send_mail(request):
+    if request.method == 'POST':
+        mail = request.POST.get('mail')
+        if mail:
+            if Usuario.objects.filter(mail=mail).exists():
+                newPassword=uuid.uuid4()
+                sendMail(mail)
+            return HttpResponse("El correo no se encuentra registrado!")
+        return HttpResponse("No se ha introducido ningún correo")
+    return render(request, 'inscripcion_ifts18/reset.html')
+
+
 
 def check(request):
     if request.method == 'POST':
         mail = request.POST.get('mail')
-        if Usuario.objects.filter(mail=mail).exists():
-            return render(request, 'inscripcion_ifts18/logged.html')
-        else:
-            return HttpResponse("El el nombre de usuario %s no existe" % mail)
-    return HttpResponse("Error, metodo get")
+        if mail:
+            password = request.POST.get('password')
+            if Usuario.objects.filter(mail=mail).exists() & Usuario.objects.filter(password=password).exists():
+                return render(request, 'inscripcion_ifts18/logged.html')
+            return HttpResponse("El usuario con el mail %s no existe" % mail)
+        return HttpResponse("No se ha introducido ningún correo")
+    return HttpResponse("404")
 
 def index(request):
     return render(request, 'inscripcion_ifts18/index.html')

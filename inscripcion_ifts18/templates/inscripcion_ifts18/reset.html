@@ -2,10 +2,10 @@
 
 {% block div %}
 <h2>Restablecer contraseña</h2> 
-<p>Ingrese su dni o correo institucional para restablecer la contraseña</p>
+<p>Ingrese su dni o correo institucional para obtener la contraseña vía mail</p>
 
-<form action="" method="POST">{% csrf_token %}
-    <input type="email" name="email" id="email" placeholder="juan.eiriz@alu.ifts18.edu.ar">
+<form action="{% url 'inscripcion_ifts18:check_if_mail_exists_and_send_mail' %}" method="POST">{% csrf_token %}
+    <input type="email" name="mail" id="mail" placeholder="juan.eiriz@alu.ifts18.edu.ar" required>
     <input type="submit" value="Enviar contraseña" />
 </form>
 {% endblock %}

@@ -6,7 +6,8 @@
 <p>Coloque su DNI o su mail institucional, su contraseña y luego inicie sesión</p>
 
 <form method="POST" action="{% url 'inscripcion_ifts18:check' %}">{% csrf_token %}
-    <input type="text" name="mail" value="" placeholder="juan.eiriz@alu.ifts18.edu.ar"><br><br>
+    <input type="text" name="mail" value="" placeholder="juan.eiriz@alu.ifts18.edu.ar" required><br><br>
+    <input type="password" name="password" value="" placeholder="password" required><br><br>
     <input type="submit" value="Submit" />
     <a href="/inscripcion_ifts18/reset">Restablecer contraseña</a>
 </form>
