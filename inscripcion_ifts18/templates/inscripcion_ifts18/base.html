@@ -19,11 +19,11 @@
 <body>
     {% block body %}
     <nav>
-        {% block nav %}
         {% load static %}
         <a href=""><img src="{% static 'ifts.jpg' %}" alt="" width="70px"></a>
         <h1 class="titulo">Sistema de inscripción a finales </h1>
         <hr>
+        {% block nav %}
         {% endblock %}
     </nav>
     <div>{% block div %}{% endblock %}</div>
