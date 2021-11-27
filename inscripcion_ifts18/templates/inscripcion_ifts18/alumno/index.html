@@ -1,0 +1,16 @@
+{% extends "inscripcion_ifts18/base.html" %}
+{% block title %} Alumno - Inscripción a finales{% endblock %}
+
+{% block nav %}
+    <a href="{% url 'inscripcion_ifts18:inscripcionFinales' %}">Inscripción</a>
+    <a href="{% url 'inscripcion_ifts18:logout' %}">Cerrar sesión</a>
+{% endblock %}
+
+{% block div %}
+<h2>Sesión iniciada</h2>
+<p>Bienvenido {{ nombre }}</p>
+{% endblock %}
+    
+    {% block footer %}
+        <p>&copy; 2018 - Inscripción a finales</p>
+    {% endblock %}
