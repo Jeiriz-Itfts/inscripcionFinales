@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -130,4 +131,10 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 #Aca se aclaran lo necesario para el mailb
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT= 587
+EMAIL_HOST_USER='juan.eiriz@alu.ifts18.edu.ar'
+EMAIL_HOST_PASSWORD='ifts1324Utnfacultad' #poner variable de entorno, import decouple
+EMAIL_USE_TLS=True
