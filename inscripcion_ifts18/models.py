@@ -9,10 +9,10 @@ from django.contrib import admin
 
 
 class Usuario(models.Model):
-    uid = models.CharField(max_length=200)
+    uid = models.CharField(max_length=200, unique=True)
     password = models.CharField(max_length=200)
     fecha_creacion = models.DateTimeField('Fecha creación')
-    mail = models.EmailField(max_length=254)
+    mail = models.EmailField(max_length=254, unique=True)
 
 
 class Rol(models.Model):
@@ -47,7 +47,7 @@ class Alumno(models.Model):
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=200)
     apellido = models.CharField(max_length=200)
-    legajo = models.CharField(max_length=200)
+    legajo = models.CharField(max_length=200, unique=True)
     dni = models.CharField(max_length=200)
 
 
