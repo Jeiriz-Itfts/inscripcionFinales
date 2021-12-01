@@ -1,4 +1,33 @@
-{% block div %}
-<h2>inscripcion</h2>
+{% extends "inscripcion_ifts18/base.html" %}
 
+{% block nav %}
+    <a href="{% url 'inscripcion_ifts18:check_if_usr' %}">Index</a>
+    <a href="{% url 'inscripcion_ifts18:logout' %}">Cerrar sesión</a>
 {% endblock %}
+
+{% block div %}
+<h2>Inscripción a finales</h2>
+<p>Selecciona la materia a la que te gustaría inscribirte</p>
+<br><br><br><br>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Año</th>
+        <th scope="col">Mesa</th>
+        <th scope="col"></th>
+        <th scope="col">Accion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>PP3</td>
+        <td>1ero</td>
+        <td>Diciembre</td>
+        <td><button>Eliminar</button></td>
+        <td><button>Editar</button></td>
+      </tr>
+    </tbody>
+  </table>
+{% endblock %}
+    
