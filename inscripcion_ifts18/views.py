@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.context import RequestContext
 from django import forms
 from rest_framework.serializers import Serializer
-from .models import Alumno, Usuario, Materia, Curso
+from .models import Alumno, MateriaAlumno, Usuario, Materia, Curso
 from .forms import EmailForm
 import uuid
 from django.template.loader import get_template
@@ -87,13 +87,35 @@ class Api(View):
     # def delete(self, request):
         
 
+def inscribir(request,id):
+    '''recibir el id enviado en inscripcion.html y con ese id, insertar un registro en la tabla MateriaAlumno'''
+    if request.session['id_alumno']:
+        try:
+            id_materia = id
+            id_alumno = request.session['id_alumno']
+            # creo objeto alumno y materia
+            alumno = Alumno.objects.get(pk=id_alumno)
+            materia = Materia.objects.get(pk=id_materia)
+            # asocio fk con materiaalumno
+            materiaalumno1 = MateriaAlumno.objects.create(id_materia = materia, id_alumno = alumno, fecha_inscripcion=timezone.now())
+            # creo objeto materiaAlumno
+            return HttpResponse('Inscripcion exitosa')
+        except Exception as e:
+            return HttpResponse(e)
+    else:
+        return render(request,'inscripcion_ifts18/alumno/login.html')
 
+# https://docs.djangoproject.com/en/3.2/intro/tutorial02/
 
 def inscripcionFinales(request):
-    materias = Materia.objects.all()
-    return render(request,'inscripcion_ifts18/alumno/inscripcion.html',  {'materias': materias})
+    if request.session['id_alumno']:
+        materias = Materia.objects.all()
+        return render(request,'inscripcion_ifts18/alumno/inscripcion.html',  {'materias': materias})
+    else:
+        return render(request,'inscripcion_ifts18/alumno/login.html')
 
 def logout(request):
+    del request.session['id_alumno']
     return render(request,'inscripcion_ifts18/alumno/logout.html')
 
 
@@ -145,6 +167,7 @@ def check_if_usr(request):
                 """ mail duplicado """
                 if Alumno.objects.filter(id_usuario=id).exists():
                     alumno = Alumno.objects.get(id_usuario=id)
+                    request.session['id_alumno'] = alumno.id
                     return render(request, 'inscripcion_ifts18/alumno/index.html', {'nombre': alumno.nombre})
                 return HttpResponse("El usuario no es alumno")
             return HttpResponse("El usuario con el mail %s no existe" % mail)

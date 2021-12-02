@@ -24,14 +24,11 @@
         <td>{{ materia.descripcion}}</td>
         <td>{{ materia.id_curso.descripcion}}</td>
         <td>
-          <a href="">
+          <a class="btn-link" href="{% url 'inscripcion_ifts18:inscribir' id=materia.id %}">
               <button type="button" class="btn btn-primary">Inscribirse</button>
           </a>
         </td>
       </tr>
-<!--para el href % url 'inscripcion_ifts18:inscripcion_finales' %?id= materia.id  -->
-      
-
   {% endfor %}
 
     </tbody>

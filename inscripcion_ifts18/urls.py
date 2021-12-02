@@ -13,5 +13,6 @@ urlpatterns = [
     path('alumno/inscripcion/',views.inscripcionFinales, name='inscripcionFinales'),
     path('api/alumno', Api.Alumno.as_view(), name='api-alumno'),
     path('api/usuario', Api.Usuario.as_view(), name='api-usr'),
+    path('alumno/inscripto/<int:id>',views.inscribir, name='inscribir'),
     path('usuario',UsuarioViewSet.as_view({'get':'list','post':'create'}), name='usuario'),
 ]
