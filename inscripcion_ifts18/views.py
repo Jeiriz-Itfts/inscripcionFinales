@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.context import RequestContext
 from django import forms
 from rest_framework.serializers import Serializer
-from .models import Alumno, Usuario
+from .models import Alumno, Usuario, Materia, Curso
 from .forms import EmailForm
 import uuid
 from django.template.loader import get_template
@@ -89,12 +89,9 @@ class Api(View):
 
 
 
-# class Alumno(View):
-#     def inscribirFinales(self, request):
-
-
 def inscripcionFinales(request):
-    return render(request,'inscripcion_ifts18/alumno/inscripcion.html')
+    materias = Materia.objects.all()
+    return render(request,'inscripcion_ifts18/alumno/inscripcion.html',  {'materias': materias})
 
 def logout(request):
     return render(request,'inscripcion_ifts18/alumno/logout.html')

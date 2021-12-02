@@ -14,19 +14,26 @@
       <tr>
         <th scope="col">Nombre</th>
         <th scope="col">Año</th>
-        <th scope="col">Mesa</th>
-        <th scope="col"></th>
         <th scope="col">Accion</th>
       </tr>
     </thead>
     <tbody>
+      <!-- show materias in the table -->
+      {% for materia in materias %}
       <tr>
-        <td>PP3</td>
-        <td>1ero</td>
-        <td>Diciembre</td>
-        <td><button>Eliminar</button></td>
-        <td><button>Editar</button></td>
+        <td>{{ materia.descripcion}}</td>
+        <td>{{ materia.id_curso.descripcion}}</td>
+        <td>
+          <a href="">
+              <button type="button" class="btn btn-primary">Inscribirse</button>
+          </a>
+        </td>
       </tr>
+<!--para el href % url 'inscripcion_ifts18:inscripcion_finales' %?id= materia.id  -->
+      
+
+  {% endfor %}
+
     </tbody>
   </table>
 {% endblock %}
