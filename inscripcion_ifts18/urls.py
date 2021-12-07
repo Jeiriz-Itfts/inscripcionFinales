@@ -5,14 +5,19 @@ from .views import *
 # que la app sea modular, una app de inscripcion, otra puede ser reportes
 app_name = 'inscripcion_ifts18'
 urlpatterns = [
-    path('',views.index,name='index'),
-    path('reset/', views.reset, name='reset'),
-    path('alumno/index/',views.check_if_usr, name='check_if_usr'),
-    path('reseteado/',views.check_if_mail_exists_and_send_mail, name='check_if_mail_exists_and_send_mail'),
-    path('logout/',views.logout, name='logout'),
-    path('alumno/inscripcion/',views.inscripcionFinales, name='inscripcionFinales'),
+    path('',login,name='login'),
+    path('reset/', reset, name='reset'),
+    path('alumno/inscripcion/',chequearSiEsUsuario, name='chequearSiEsUsuario'),
+    path('alumno/inscripcion/',alumnoIndex, name='alumnoIndex'),
+    path('reseteado/',chequearSiMailExisteYEnviarMail, name='chequearSiMailExisteYEnviarMail'),
+    path('logout/',logout, name='logout'),
+    path('alumno/inscripcion/',Inscripcion.inscripcion, name='inscripcion'),
+    path('alumno/inscripciones/',Inscripcion.verInscripciones, name='verInscripciones'),
+    path('alumno/inscripciones/<int:id>',Inscripcion.eliminarInscripcion, name='eliminarInscripcion'),
     path('api/alumno', Api.Alumno.as_view(), name='api-alumno'),
     path('api/usuario', Api.Usuario.as_view(), name='api-usr'),
-    path('alumno/inscripto/<int:id>',views.inscribir, name='inscribir'),
+    path('api/materia', Api.MateriaAlumno.as_view(), name='api-materia'),
+    path('alumno/inscripcion/<int:id>',Inscripcion.inscribir, name='inscribir'),
     path('usuario',UsuarioViewSet.as_view({'get':'list','post':'create'}), name='usuario'),
+    path('materia',MateriaAlumnoViewSet.as_view({'get':'list','post':'create'}), name='materia'),
 ]

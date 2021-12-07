@@ -8,16 +8,44 @@ body{
     height:1000px;
 }
 
+.anclas{
+    text-align: center;
+}
+
+.anclas a{
+    color:black;
+    text-decoration: none;
+    width:50%;
+    margin:auto;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 5%;
+}
+
+.anclas a:hover {
+    color: #0099ff;
+    text-decoration: underline;
+}
 h1 {
     width: 600px;
     margin: -90px auto;
 }
-hr{
+.nav{
     margin-top:150px;
 }
 
+h3{
+    width: 80%;
+    text-align: center;
+    margin: 100px auto;
+    font-weight:bold;
+
+}
+
+
 h2{
-    width: 200px;
+    width: 80%;
+    text-align: center;
     margin: 100px auto;
     font-weight:bold;
 
@@ -29,9 +57,9 @@ p{
     margin: -70px auto;
 
 }
-div{
-    width: 400px;
-    height: 700px;
+.table{
+    width: 40%!important;
+    height: 20%;
     margin: auto;
 }
 form{
@@ -43,6 +71,8 @@ form{
 input{
     width:300px;
 }
+
+
 button{
     margin-left:40px;
     margin-bottom:10px;

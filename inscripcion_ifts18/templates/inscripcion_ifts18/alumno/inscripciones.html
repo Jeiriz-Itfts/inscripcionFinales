@@ -1,0 +1,47 @@
+{% extends "inscripcion_ifts18/base.html" %}
+
+{% block nav %}
+<div class="anclas">
+    <a href="{% url 'inscripcion_ifts18:alumnoIndex' %}">Index</a>
+    <a href="{% url 'inscripcion_ifts18:inscripcion' %}">Inscripción</a>
+    <a href="{% url 'inscripcion_ifts18:logout' %}">Cerrar sesión</a>
+    <hr>
+  </div>
+
+    {% endblock %}
+
+{% block body %}
+<h3>Inscripciones realizadas</h2>
+{% if eliminacionCorrecta %}
+    <div class="alert alert-success" role="alert">
+        <strong>¡Eliminación correcta!</strong>
+    </div>
+    {% endif %}
+<br><br>
+<table class="table table-striped">
+<tbody>
+    <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Año</th>
+          <th scope="col">Fecha de inscripción</th>
+          <th scope="col">Accion</th>
+        </tr>
+      </thead>
+    <!-- show materias in the table -->
+    {% for inscripcion in inscripciones %}
+    <tr>
+      <td>{{ inscripcion.id_materia.descripcion}}</td>
+      <td>{{ inscripcion.id_materia.id_curso.descripcion}}</td>
+      <td>{{ inscripcion.fecha_inscripcion}}</td>
+      <td>
+        <a class="btn-link" href="{% url 'inscripcion_ifts18:eliminarInscripcion' inscripcion.id %}">
+            <button type="button" class="btn btn-primary">Eliminar</button>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+
+</tbody>
+</table>
+{% endblock %}

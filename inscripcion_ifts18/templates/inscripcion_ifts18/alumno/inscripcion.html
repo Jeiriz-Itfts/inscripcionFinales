@@ -1,15 +1,35 @@
 {% extends "inscripcion_ifts18/base.html" %}
 
 {% block nav %}
-    <a href="{% url 'inscripcion_ifts18:check_if_usr' %}">Index</a>
-    <a href="{% url 'inscripcion_ifts18:logout' %}">Cerrar sesión</a>
+<div class="anclas">
+<a href="{% url 'inscripcion_ifts18:alumnoIndex' %}">Index</a>
+<a href="{% url 'inscripcion_ifts18:verInscripciones' %}">Ver inscripciones</a>
+<a href="{% url 'inscripcion_ifts18:logout' %}">Cerrar sesión</a>
+<hr>
+</div>
+
 {% endblock %}
 
-{% block div %}
-<h2>Inscripción a finales</h2>
+{% block body %}
+<h3>Bienvenido {{ nombre.upper }} a la inscripción de finales</h2>
 <p>Selecciona la materia a la que te gustaría inscribirte</p>
-<br><br><br><br>
+<br><br>
+<br><br>
+<!-- si se inscribió correctamente, mostrar alerta satisfactoria -->
+{% if inscripto %}
+    <div class="alert alert-success" role="alert">
+        <strong>¡Inscripción realizada correctamente!</strong>
+    </div>
+    {% endif %}
+  <!-- show error alert -->
+  {% if error %}
+    <div class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
+  {% endif %}
+  <br><br>
 <table class="table table-striped">
+  <tbody>
     <thead>
       <tr>
         <th scope="col">Nombre</th>
@@ -17,21 +37,21 @@
         <th scope="col">Accion</th>
       </tr>
     </thead>
-    <tbody>
+
       <!-- show materias in the table -->
       {% for materia in materias %}
       <tr>
         <td>{{ materia.descripcion}}</td>
         <td>{{ materia.id_curso.descripcion}}</td>
         <td>
-          <a class="btn-link" href="{% url 'inscripcion_ifts18:inscribir' id=materia.id %}">
-              <button type="button" class="btn btn-primary">Inscribirse</button>
-          </a>
+          <!-- si el id de una materia se encuentra en inscripciones realizadas, mostrar un boton desactivado -->
+            <a href="{% url 'inscripcion_ifts18:inscribir' materia.id %}" class="btn btn-primary">Inscribir</a>
         </td>
       </tr>
   {% endfor %}
 
     </tbody>
   </table>
+  
 {% endblock %}
     

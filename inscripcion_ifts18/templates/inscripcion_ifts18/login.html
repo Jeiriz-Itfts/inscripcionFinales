@@ -1,14 +1,14 @@
 {% extends "inscripcion_ifts18/base.html" %}
 
 
-{% block div %}
+{% block body %}
 <h2>Iniciar sesión</h2>
 <p>Coloque su DNI o su mail institucional, su contraseña y luego inicie sesión</p>
 
-<form method="POST" action="{% url 'inscripcion_ifts18:check_if_usr' %}">{% csrf_token %}
+<form method="POST" action="{% url 'inscripcion_ifts18:chequearSiEsUsuario' %}">{% csrf_token %}
     <input type="text" name="mail" value="" placeholder="juan.eiriz@alu.ifts18.edu.ar" required><br><br>
     <input type="password" name="password" value="" placeholder="password" required><br><br>
-    <input type="submit" value="Submit" />
+    <input type="submit" value="Iniciar sesión" class="btn btn-primary" />
     <a href="/inscripcion_ifts18/reset">Restablecer contraseña</a>
 </form>
 
