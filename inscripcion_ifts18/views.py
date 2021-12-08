@@ -1,5 +1,5 @@
 from django.http.response import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponse, Http404
 from django.utils import timezone
 from django.urls import reverse
@@ -8,8 +8,10 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.template.context import RequestContext
 from django import forms
+from rest_framework.fields import empty
 from rest_framework.serializers import Serializer
-from .models import Alumno, MateriaAlumno, Usuario, Materia, Curso
+
+from .models import Alumno, Directivo, MateriaAlumno, Usuario, Materia, Curso
 from .forms import EmailForm
 import uuid
 from django.template.loader import get_template
@@ -17,7 +19,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from rest_framework.viewsets import ModelViewSet   
 from .serializer import UsuarioSeriazer, MateriaAlumnoSeriazer
-
+from django.contrib.auth.decorators import login_required
 
 # class Directivo(object):
 #     def __init__(self, nombre, apellido, id_usuario, dni):
@@ -30,74 +32,73 @@ from .serializer import UsuarioSeriazer, MateriaAlumnoSeriazer
 #     def __init__(self, descripcion):
 #         self.descripcion = descripcion
 
-class Inscripcion():
+
+# Alumno
+class Inscripcion(View):
     def eliminarInscripcion(request, id):
-        if request.session.get('id_alumno'):
-            try:
-                id_alumno = request.session['id_alumno']
-                inscripcionId = id
-                # creo objeto alumno y materia
-                inscripcionEliminada = MateriaAlumno.objects.filter(id_alumno=id_alumno, id_materia=inscripcionId).delete()
-                if inscripcionEliminada:
-                        eliminacionCorrecta = True
-                        inscripciones = MateriaAlumno.objects.filter(id_alumno=id_alumno)
-                return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'eliminacionCorrecta': eliminacionCorrecta,'inscripciones':inscripciones})
-            except Exception as e:
-                return HttpResponse(e)
-        else:
-            return render(request,'inscripcion_ifts18/index.html')
+        try:
+            # esto hacerlo con __init__
+            id_alumno = request.session['id_alumno']
+            inscripcionId = id
+            # creo objeto alumno y materia
+            if MateriaAlumno.objects.filter(id_alumno=id_alumno, id=inscripcionId).exists():
+                if MateriaAlumno.objects.filter(id_alumno=id_alumno,id=inscripcionId).delete():
+                    eliminacionCorrecta = True
+                    inscripciones = MateriaAlumno.objects.filter(id_alumno=id_alumno)
+            return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'eliminacionCorrecta': eliminacionCorrecta,'inscripciones':inscripciones})
+        except Exception as e:
+            return HttpResponse(e)
 
     def verInscripciones(request):
-        if request.session.get('id_alumno'):
-            id_alumno = request.session['id_alumno']
-            inscripciones = MateriaAlumno.objects.filter(id_alumno=id_alumno)
-            return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'inscripciones': inscripciones})
-        else:
-            return render(request,'inscripcion_ifts18/index.html')
+        id_alumno = request.session['id_alumno']
+        inscripciones = MateriaAlumno.objects.filter(id_alumno=id_alumno)
+        return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'inscripciones': inscripciones})
 
+    # @login_required(login_url="inscripcion_ifts18:login")
     def inscripcion(request):
-        if  request.session['id_alumno']:
-            materias = Materia.objects.all()
-            # inscripciones = MateriaAlumno.objects.filter(id_alumno=id_alumno)
-            return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'materias': materias})
-        else:
-            return render(request,'inscripcion_ifts18/index.html')
+        if request.session['id_alumno'] is empty:
+            return redirect('inscripcion_ifts18:login')
+        materias = Materia.objects.all()
+        return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'materias': materias})
 
     def inscribir(request,id):
-        '''recibir el id enviado en inscripcion.html y con ese id, insertar un registro en la tabla MateriaAlumno'''
-        if request.session.get('id_alumno'):
-            try:
-                materias = Materia.objects.all()
-                id_materia = id
-                id_alumno = request.session['id_alumno']
-                # creo objeto alumno y materia
-                alumno = Alumno.objects.get(pk=id_alumno)
-                materia = Materia.objects.get(pk=id_materia)
-                materiaAlumno = MateriaAlumno(id_alumno=alumno, id_materia=materia)
-                if MateriaAlumno.objects.filter(id_alumno=alumno, id_materia=materia).exists():
-                    return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'error': 'Ya esta inscripto a esa materia', 'materias': materias})
-                # asocio fk con materiaalumno
-                else:
-                    materiaalumno1 = MateriaAlumno.objects.create(id_materia = materia, id_alumno = alumno, fecha_inscripcion=timezone.now())
-                    # creo objeto materiaAlumno
-                    if materiaalumno1:
-                        inscripto = True
-                    return render(request,'inscripcion_ifts18/alumno/inscripcion.html',{'inscripto':inscripto, 'materias': materias})
-            except Exception as e:
-                return HttpResponse(e)
-        else:
-            return render(request,'inscripcion_ifts18/index.html')    
+        try:
+            materias = Materia.objects.all()
+            id_materia = id
+            id_alumno = request.session['id_alumno']
+            # creo objeto alumno y materia
+            alumno = Alumno.objects.get(pk=id_alumno)
+            materia = Materia.objects.get(pk=id_materia)
+            materiaAlumno = MateriaAlumno(id_alumno=alumno, id_materia=materia)
+            if MateriaAlumno.objects.filter(id_alumno=alumno, id_materia=materia).exists():
+                return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'error': 'Ya esta inscripto a esa materia', 'materias': materias})
+            # asocio fk con materiaalumno
+            else:
+                materiaalumno1 = MateriaAlumno.objects.create(id_materia = materia, id_alumno = alumno, fecha_inscripcion=timezone.now())
+                # creo objeto materiaAlumno
+                if materiaalumno1:
+                    inscripto = True
+                return render(request,'inscripcion_ifts18/alumno/inscripcion.html',{'inscripto':inscripto, 'materias': materias})
+        except Exception as e:
+            return HttpResponse(e)
 
 
-# https://docs.djangoproject.com/en/3.2/intro/tutorial02/
 
-""" All """
-def alumnoIndex(request):
-    if request.session.get('nombre'):
-        return render(request,'inscripcion_ifts18/alumno/index.html',{'nombre':request.session.get('nombre')})
-    else:
-        return render(request,'inscripcion_ifts18/index.html')
+# Directivos
+# class ABMCursosYMaterias(View):
+#     def abmCursos(request):
 
+
+#     def abmMaterias(request):
+
+    
+#     def verCursos(request):
+
+#     def verMaterias(request):
+
+
+
+# """ All """
 def chequearSiEsUsuario(request):
     if request.method == 'POST':
         mail = request.POST.get('mail')
@@ -109,8 +110,14 @@ def chequearSiEsUsuario(request):
                     alumno = Alumno.objects.get(id_usuario=usuario.id)
                     request.session['id_alumno'] = alumno.id
                     request.session['nombre'] = alumno.nombre
-                    inscripciones = Inscripcion()
-                    inscripciones.inscripcion()
+                    return render(request,'inscripcion_ifts18/alumno/index.html',{'nombre':alumno.nombre})
+                # chequear si es directivo
+                elif Directivo.objects.filter(id_usuario=usuario.id).exists():
+                    directivo = Directivo.objects.get(id_usuario=usuario.id)
+                    request.session['id_directivo'] = directivo.id
+                    request.session['nombre'] = directivo.nombre
+                    return render(request,'inscripcion_ifts18/directivo/index.html',{'nombre':directivo.nombre})
+                
                 return HttpResponse("El usuario no es alumno")
             return HttpResponse("El usuario con el mail %s no existe" % mail)
         return HttpResponse("No se ha introducido ningún correo")
@@ -157,11 +164,10 @@ def chequearSiMailExisteYEnviarMail(self, request):
     return render(request, 'inscripcion_ifts18/reset.html')
 
 def logout(request):
-    if request.session.get('nombre') is not None:
-        del request.session['nombre']
-    if request.session.get('id_alumno') is not None:
+    if request.session['id_alumno']:
         del request.session['id_alumno']
-    return render(request,'inscripcion_ifts18/index.html')
+        del request.session['nombre']
+    return render(request,'inscripcion_ifts18/login.html')
 
 """ API """
 class UsuarioViewSet(ModelViewSet):

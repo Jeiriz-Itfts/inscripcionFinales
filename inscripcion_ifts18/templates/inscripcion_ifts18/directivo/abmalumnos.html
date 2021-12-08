@@ -1,0 +1,19 @@
+{% extends "inscripcion_ifts18/base.html" %}
+
+{% block nav %}
+<div class="anclas">
+    <a href="{% url 'inscripcion_ifts18:' %}">ABM Cursadas y materias</a>
+    <a href="{% url 'inscripcion_ifts18:' %}">Cerrar sesión</a>
+    <hr>
+  </div>
+
+
+  {% endblock %}
+
+  {% block body %}
+  <h3>Bienvenido {{ nombre.upper }} a la inscripción de finales</h2>
+  <br><br>
+  <br><br>
+  {% endblock %}
+      
+  

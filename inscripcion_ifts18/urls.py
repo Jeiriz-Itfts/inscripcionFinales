@@ -1,3 +1,5 @@
+
+from django.conf.urls import url
 from django.urls import path, include
 from . import views
 from .views import *
@@ -7,13 +9,13 @@ app_name = 'inscripcion_ifts18'
 urlpatterns = [
     path('',login,name='login'),
     path('reset/', reset, name='reset'),
-    path('alumno/inscripcion/',chequearSiEsUsuario, name='chequearSiEsUsuario'),
-    path('alumno/inscripcion/',alumnoIndex, name='alumnoIndex'),
+    path('alumno/index',chequearSiEsUsuario, name='chequearSiEsUsuario'),
     path('reseteado/',chequearSiMailExisteYEnviarMail, name='chequearSiMailExisteYEnviarMail'),
     path('logout/',logout, name='logout'),
     path('alumno/inscripcion/',Inscripcion.inscripcion, name='inscripcion'),
     path('alumno/inscripciones/',Inscripcion.verInscripciones, name='verInscripciones'),
     path('alumno/inscripciones/<int:id>',Inscripcion.eliminarInscripcion, name='eliminarInscripcion'),
+    # path('directivo/cursosmaterias/',ABMCursosYMaterias, name='ABMCursosYMaterias'),
     path('api/alumno', Api.Alumno.as_view(), name='api-alumno'),
     path('api/usuario', Api.Usuario.as_view(), name='api-usr'),
     path('api/materia', Api.MateriaAlumno.as_view(), name='api-materia'),

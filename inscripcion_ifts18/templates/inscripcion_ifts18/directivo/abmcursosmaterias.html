@@ -1,0 +1,45 @@
+{% extends "inscripcion_ifts18/base.html" %}
+
+{% block nav %}
+<div class="anclas">
+    <a href="{% url 'inscripcion_ifts18:' %}">ABM Alumnos</a>
+    <a href="{% url 'inscripcion_ifts18:' %}">Cerrar sesión</a>
+    <hr>
+  </div>
+
+
+  {% endblock %}
+
+  {% block body %}
+  <h3>Bienvenido {{ nombre.upper }} a la inscripción de finales</h2>
+  <br><br>
+  <br><br>
+
+  <div class="cursos">
+  <h4>Agregar cursos</h4>
+  <form action="{% url 'inscripcion_ifts18:agregarcurso' %}" method="post">
+    <input type="text" name="curso" id="curso" placeholder="Nombre del curso" required><br>
+    <input type="submit" value="Agregar">
+    <input type="submit" value="Editar">
+    <input type="submit" value="Eliminar">
+    <br>
+  </form>
+  </div>
+  <div class="materias">
+    <h4>Agregar materias</h4>
+    <form action="{% url 'inscripcion_ifts18:agregarmateria' %}" method="post">
+      <input type="text" name="materia" id="materia" placeholder="Nombre de la materia" required><br>
+      <!-- desplegable de cursos creados-->
+      <select name="curso" id="curso">
+        {% for curso in cursos %}
+        <option value="{{ curso.id }}">{{ curso.nombre }}</option>
+        {% endfor %}
+      <input type="submit" value="Agregar">
+      <input type="submit" value="Editar">
+      <input type="submit" value="Eliminar">
+      <br>
+    </form>
+  </div>
+  {% endblock %}
+      
+  
