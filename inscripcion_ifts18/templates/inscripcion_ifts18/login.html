@@ -11,5 +11,13 @@
     <input type="submit" value="Iniciar sesión" class="btn btn-primary" />
     <a href="/inscripcion_ifts18/reset">Restablecer contraseña</a>
 </form>
+<br><br>
+{% if error %}
+<div class="alert alert-danger">
+    <strong>{{error}}</strong>
+</div>
+{% endif %}
+
+
 
 {% endblock %}

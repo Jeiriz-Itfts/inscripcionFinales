@@ -1,0 +1,73 @@
+{% extends "inscripcion_ifts18/base.html" %}
+
+{% block nav %}
+<div class="anclas">
+    <a href="{% url 'inscripcion_ifts18:logout' %}">Cerrar sesión</a>
+    <hr>
+  </div>
+
+
+  {% endblock %}
+
+  {% block body %}
+  <h3>ABM de cursos y materias</h2>
+  <div class="container">
+    <div class="row">
+    <div class="col-md-5">
+        <h3>Cursos</h3>
+        <form action="" method="post">
+        <input type="text" name="curso" placeholder="Nombre del curso" class="form-control">
+        <button type="submit" class="btn directivo btn-primary">Agregar curso</button>
+        </form>
+        <br>
+        <table class="table table-striped">
+        <thead>
+            <tr>
+            <th>Nombre</th>
+            <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for curso in cursos %}
+            <tr>
+            <td>{{ curso.descripcion }}</td>
+            <td>
+                <a href="" class="btn btn-danger">Eliminar</a>
+            </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+    <div class="col-md-5">
+        <h3>Materias</h3>
+        <form action="" method="post">
+        <input type="text" name="materia" placeholder="Nombre de la materia" class="form-control">
+        <button type="submit" class="btn directivo btn-primary float-right"><span class="glyphicon glyphicon-plus-sign"></span></button>
+        </form>
+        <br>
+        <table class="table table-striped">
+        <thead>
+            <tr>
+            <th>Nombre</th>
+            <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for materia in materias %}
+            <tr>
+            <td>{{ materia.descripcion }}</td>
+            <td>
+                <a href="" class="btn btn-danger">Eliminar</a>
+            </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+
+  {% endblock %}
+      
+  

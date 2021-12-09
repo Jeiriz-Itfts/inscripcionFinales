@@ -66,22 +66,30 @@ p{
 
 }
 .table{
-    width: 40%!important;
+    width: 70%!important;
     height: 20%;
     margin: auto;
 }
 form{
     width: 250px;
-    height: 500px;
     margin: auto;
     margin-top:100px;
 }
+
 input{
     width:300px;
 }
 
-
+.form-control{
+    position:absolute;
+    width:51%!important;
+}
 button{
     margin-left:40px;
     margin-bottom:10px;
+}
+
+.directivo{
+    position:relative;
+    right:-70%;
 }
