@@ -85,8 +85,50 @@ class Inscripcion(View):
 
 
 # Directivos
-# class ABMCursosYMaterias(View):
-#     def abmCursos(request):
+class Abm(View):
+    # vista de index
+    def cursosMaterias(request):
+        materias = Materia.objects.all()
+        cursos = Curso.objects.all()
+        return render(request,'inscripcion_ifts18/directivo/abm/cursos_materias.html',{'cursos':cursos, 'materias': materias})
+
+    # def curso(request):
+    #     # agregar un curso a la base de datos
+    #     if request.session['id_alumno'] is empty:
+    #         return redirect('inscripcion_ifts18:login')
+    #     if request.method == 'POST':
+    #         curso = Curso(nombre=request.POST['nombre'], descripcion=request.POST['descripcion'])
+    #         curso.save()
+    #         return redirect('inscripcion_ifts18:abm')
+    #     materias = Materia.objects.all()
+    #     cursos = Curso.objects.all()
+    #     return render(request,'inscripcion_ifts18/directivo/abm/cursos_materias.html',{'cursos':cursos, 'materias': materias})
+        
+
+    # def materia(request):
+    #     # agregar una materia a la base de datos tomando lo que se envió en el formulario cursos_materias.html
+    #     if request.session['id_alumno'] is empty:
+    #         return redirect('inscripcion_ifts18:login')
+    #     if request.method == 'POST':
+    #         materia = Materia(descripcion=request.POST['descripcion'])
+    #         materia.save()
+    #         return redirect('inscripcion_ifts18:abm')
+    #     materias = Materia.objects.all()
+    #     cursos = Curso.objects.all()
+    #     return render(request,'inscripcion_ifts18/directivo/abm/cursos_materias.html',{'cursos':cursos, 'materias': materias})
+        
+
+    # def alumno(request):
+    #     if request.session['id_alumno'] is empty:
+    #         return redirect('inscripcion_ifts18:login')
+    #     if request.method == 'POST':
+    #         alumno = Alumno(nombre=request.POST['nombre'], apellido=request.POST['apellido'], dni=request.POST['dni'])
+    #         alumno.save()
+    #         return redirect('inscripcion_ifts18:abm')
+    #     materias = Materia.objects.all()
+    #     cursos = Curso.objects.all()
+    #     return render(request,'inscripcion_ifts18/directivo/abm/alumnos.html',{'cursos':cursos, 'materias': materias})
+
 
 
 #     def abmMaterias(request):
@@ -104,7 +146,7 @@ def chequearSiEsUsuario(request):
         mail = request.POST.get('mail')
         if mail:
             password = request.POST.get('password')
-            if Usuario.objects.filter(mail=mail).exists() & Usuario.objects.filter(password=password).exists():
+            if Usuario.objects.filter(mail=mail,password=password).exists():
                 usuario = Usuario.objects.get(mail=mail)
                 if Alumno.objects.filter(id_usuario=usuario.id).exists():
                     alumno = Alumno.objects.get(id_usuario=usuario.id)
@@ -117,11 +159,9 @@ def chequearSiEsUsuario(request):
                     request.session['id_directivo'] = directivo.id
                     request.session['nombre'] = directivo.nombre
                     return render(request,'inscripcion_ifts18/directivo/index.html',{'nombre':directivo.nombre})
-                
-                return HttpResponse("El usuario no es alumno")
-            return HttpResponse("El usuario con el mail %s no existe" % mail)
-        return HttpResponse("No se ha introducido ningún correo")
-    return HttpResponse("404")
+            return render(request,'inscripcion_ifts18/login.html',{'error':"El correo o la contraseña son incorrectos!"})
+        return render(request,'inscripcion_ifts18/login.html',{'error':"No ha introducido una cuenta de correo!"})
+    return render(request,'inscripcion_ifts18/login.html',{'error':"Error técnico, favor de comunicarse con juan.eiriz@alu.ifts18.edu.com"})
 
 def login(request):
     return render(request, 'inscripcion_ifts18/login.html')
@@ -166,6 +206,9 @@ def chequearSiMailExisteYEnviarMail(self, request):
 def logout(request):
     if request.session['id_alumno']:
         del request.session['id_alumno']
+        del request.session['nombre']
+    if request.session['id_directivo']:
+        del request.session['id_directivo']
         del request.session['nombre']
     return render(request,'inscripcion_ifts18/login.html')
 
