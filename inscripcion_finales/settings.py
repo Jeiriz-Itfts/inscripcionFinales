@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,12 +44,15 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-   'django.middleware.csrf.CsrfViewMiddleware',
-   'django.contrib.sessions.middleware.SessionMiddleware',
    'django.middleware.common.CommonMiddleware',
+   'django.contrib.sessions.middleware.SessionMiddleware',
+   'django.middleware.csrf.CsrfViewMiddleware',
    'django.contrib.auth.middleware.AuthenticationMiddleware',
    'django.contrib.messages.middleware.MessageMiddleware',
-   'django.middleware.clickjacking.XFrameOptionsMiddleware',
+#    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 
 ]
 
@@ -138,3 +143,16 @@ EMAIL_PORT= 587
 EMAIL_HOST_USER='juan.eiriz@alu.ifts18.edu.ar'
 EMAIL_HOST_PASSWORD='ifts1324Utnfacultad' #poner variable de entorno, import decouple
 EMAIL_USE_TLS=True
+
+
+CACHEAS = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cachepaginas',
+    }
+}
+
+# A donde me redirecciona cuando inicie sesión
+# PARA DIRECTIVO
+LOGIN_REDIRECT_URL = reverse_lazy('inscripcion_ifts18:inscripcion')
+LOGOUT_REDIRECT_URL = reverse_lazy('inscripcion_ifts18:LoginView')
