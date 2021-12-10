@@ -1,7 +1,8 @@
 
+
 from django.conf.urls import url
 from django.urls import path, include
-from . import views
+from django.contrib.auth.views import LoginView, LogoutView
 from .views import *
 
 # que la app sea modular, una app de inscripcion, otra puede ser reportes
@@ -9,11 +10,11 @@ app_name = 'inscripcion_ifts18'
 
 # Buenas Practicas arquitectura restfull
 urlpatterns = [
-    path('',login,name='login'),
+    path('accounts/login/',LoginView,{'template_name':'inscripcion_ifts18/login.html'},name='LoginView'),
     path('reset/', reset, name='reset'),
     path('index',chequearSiEsUsuario, name='chequearSiEsUsuario'),
     path('reseteado/',chequearSiMailExisteYEnviarMail, name='chequearSiMailExisteYEnviarMail'),
-    path('logout/',logout, name='logout'),
+    path('logout/',LogoutView, name='LogoutView'),
     path('alumno/inscripcion/',Inscripcion.inscripcion, name='inscripcion'),
     path('alumno/inscripciones/',Inscripcion.verInscripciones, name='verInscripciones'),
     path('alumno/inscripciones/<int:id>',Inscripcion.eliminarInscripcion, name='eliminarInscripcion'),

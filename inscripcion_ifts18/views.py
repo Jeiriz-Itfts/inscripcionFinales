@@ -50,16 +50,20 @@ class Inscripcion(View):
             return HttpResponse(e)
 
     def verInscripciones(request):
-        id_alumno = request.session['id_alumno']
-        inscripciones = MateriaAlumno.objects.filter(id_alumno=id_alumno)
-        return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'inscripciones': inscripciones})
+        if request.user.is_authenticated:
+            id_alumno = request.session['id_alumno']
+            inscripciones = MateriaAlumno.objects.filter(id_alumno=id_alumno)
+            return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'inscripciones': inscripciones})
+        else:
+            return redirect('inscripcion_ifts18:LoginView')
 
     # @login_required(login_url="inscripcion_ifts18:login")
     def inscripcion(request):
-        if request.session['id_alumno'] is empty:
-            return redirect('inscripcion_ifts18:login')
-        materias = Materia.objects.all()
-        return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'materias': materias})
+        if request.user.is_authenticated:
+            materias = Materia.objects.all()
+            return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'materias': materias})
+        else:
+            return redirect('inscripcion_ifts18:LoginView')
 
     def inscribir(request,id):
         try:
@@ -88,9 +92,12 @@ class Inscripcion(View):
 class Abm(View):
     # vista de index
     def cursosMaterias(request):
+        # if request.user.is_authenticated:
         materias = Materia.objects.all()
         cursos = Curso.objects.all()
         return render(request,'inscripcion_ifts18/directivo/abm/cursos_materias.html',{'cursos':cursos, 'materias': materias})
+        # else:
+        #     return redirect('inscripcion_ifts18:login')
 
     # def curso(request):
     #     # agregar un curso a la base de datos
@@ -163,9 +170,6 @@ def chequearSiEsUsuario(request):
         return render(request,'inscripcion_ifts18/login.html',{'error':"No ha introducido una cuenta de correo!"})
     return render(request,'inscripcion_ifts18/login.html',{'error':"Error técnico, favor de comunicarse con juan.eiriz@alu.ifts18.edu.com"})
 
-def login(request):
-    return render(request, 'inscripcion_ifts18/login.html')
-
 def reset(request):
     return render(request, 'inscripcion_ifts18/reset.html')
 
@@ -203,14 +207,6 @@ def chequearSiMailExisteYEnviarMail(self, request):
         return HttpResponse("No se ha introducido ningún correo")
     return render(request, 'inscripcion_ifts18/reset.html')
 
-def logout(request):
-    if request.session['id_alumno']:
-        del request.session['id_alumno']
-        del request.session['nombre']
-    if request.session['id_directivo']:
-        del request.session['id_directivo']
-        del request.session['nombre']
-    return render(request,'inscripcion_ifts18/login.html')
 
 """ API """
 class UsuarioViewSet(ModelViewSet):

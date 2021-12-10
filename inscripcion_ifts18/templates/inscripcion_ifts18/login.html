@@ -5,19 +5,27 @@
 <h2>Iniciar sesión</h2>
 <p>Coloque su DNI o su mail institucional, su contraseña y luego inicie sesión</p>
 
-<form method="POST" action="{% url 'inscripcion_ifts18:chequearSiEsUsuario' %}">{% csrf_token %}
-    <input type="text" name="mail" value="" placeholder="juan.eiriz@alu.ifts18.edu.ar" required><br><br>
-    <input type="password" name="password" value="" placeholder="password" required><br><br>
-    <input type="submit" value="Iniciar sesión" class="btn btn-primary" />
-    <a href="/inscripcion_ifts18/reset">Restablecer contraseña</a>
-</form>
-<br><br>
-{% if error %}
-<div class="alert alert-danger">
-    <strong>{{error}}</strong>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <div class="fadeIn first">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+              </svg>
+        </div>
+        <form method="POST" action="{% url 'inscripcion_ifts18:chequearSiEsUsuario' %}">{% csrf_token %}
+            <input type="text" id="login" class="fadeIn second" name="mail" value="" placeholder="juan.eiriz@alu.ifts18.edu.ar" required><br><br>
+            <input type="password" id="password" class="fadeIn third" name="password" value="" placeholder="password" required><br><br>
+            <input type="submit" class="fadeIn fourth" value="Iniciar sesión" class="btn btn-primary" />
+        </form>
+        <div id="formFooter">
+            <a class="underlineHover" href="/inscripcion_ifts18/reset">Restablecer contraseña</a>
+          </div>
+    </div>
+    <br><br>
+    {% if error %}
+    <div class="alert alert-danger">
+        <strong>{{error}}</strong>
+    </div>
 </div>
 {% endif %}
-
-
-
 {% endblock %}
