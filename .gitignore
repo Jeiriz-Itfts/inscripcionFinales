@@ -18,3 +18,7 @@ miProyecto/inscripcion_finales/__pycache__
 miProyecto/inscripcion_finales/__pycache__/
 miProyecto/inscripcion_ifts18/__pycache__/
 miProyecto/inscripcion_ifts18/__pycache__
+# agregar la ruta del archivo settings.py para que no se suba a github
+inscripcion_finales/settings.py
+miProyecto/inscripcion_finales/settings.py
+
