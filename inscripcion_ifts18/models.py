@@ -76,7 +76,7 @@ class Materia(models.Model):
         return self.descripcion
 
 class MateriaAlumno(models.Model):
-    id_materia = models.ForeignKey(Materia, on_delete=models.CASCADE,  unique=True)
+    id_materia = models.OneToOneField('Materia', on_delete=models.CASCADE)
     id_alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE)
     fecha_inscripcion = models.DateTimeField('Fecha inscripción')
     
