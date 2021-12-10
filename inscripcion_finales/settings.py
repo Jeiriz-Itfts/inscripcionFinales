@@ -141,7 +141,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT= 587
 EMAIL_HOST_USER='juan.eiriz@alu.ifts18.edu.ar'
-EMAIL_HOST_PASSWORD='ifts1324Utnfacultad' #poner variable de entorno, import decouple
+EMAIL_HOST_PASSWORD='' #poner variable de entorno, import decouple
 EMAIL_USE_TLS=True
 
 
