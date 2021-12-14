@@ -10,9 +10,10 @@ app_name = 'inscripcion_ifts18'
 
 # Buenas Practicas arquitectura restfull
 urlpatterns = [
-    path('accounts/login/',LoginView,{'template_name':'inscripcion_ifts18/login.html'},name='LoginView'),
+    path('login/',LoginView.as_view(),name='login'),
     path('reset/', reset, name='reset'),
-    path('index',chequearSiEsUsuario, name='chequearSiEsUsuario'),
+    path('index/', index, name='index'),
+    # path('index',chequearSiEsUsuario, name='chequearSiEsUsuario'),
     path('reseteado/',chequearSiMailExisteYEnviarMail, name='chequearSiMailExisteYEnviarMail'),
     path('logout/',LogoutView, name='LogoutView'),
     path('alumno/inscripcion/',Inscripcion.inscripcion, name='inscripcion'),

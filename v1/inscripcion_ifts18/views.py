@@ -10,7 +10,6 @@ from django.template.context import RequestContext
 from django import forms
 from rest_framework.fields import empty
 from rest_framework.serializers import Serializer
-
 from .models import Alumno, Directivo, MateriaAlumno, Usuario, Materia, Curso
 from .forms import EmailForm
 import uuid
@@ -49,6 +48,7 @@ class Inscripcion(View):
         except Exception as e:
             return HttpResponse(e)
 
+    @login_required
     def verInscripciones(request):
         if request.user.is_authenticated:
             id_alumno = request.session['id_alumno']
@@ -148,27 +148,31 @@ class Abm(View):
 
 
 # """ All """
+def index(request):
+    return render(request,'inscripcion_ifts18/index.html')
+
 def chequearSiEsUsuario(request):
     if request.method == 'POST':
-        mail = request.POST.get('mail')
-        if mail:
-            password = request.POST.get('password')
-            if Usuario.objects.filter(mail=mail,password=password).exists():
-                usuario = Usuario.objects.get(mail=mail)
-                if Alumno.objects.filter(id_usuario=usuario.id).exists():
-                    alumno = Alumno.objects.get(id_usuario=usuario.id)
-                    request.session['id_alumno'] = alumno.id
-                    request.session['nombre'] = alumno.nombre
-                    return render(request,'inscripcion_ifts18/alumno/index.html',{'nombre':alumno.nombre})
-                # chequear si es directivo
-                elif Directivo.objects.filter(id_usuario=usuario.id).exists():
-                    directivo = Directivo.objects.get(id_usuario=usuario.id)
-                    request.session['id_directivo'] = directivo.id
-                    request.session['nombre'] = directivo.nombre
-                    return render(request,'inscripcion_ifts18/directivo/index.html',{'nombre':directivo.nombre})
-            return render(request,'inscripcion_ifts18/login.html',{'error':"El correo o la contraseña son incorrectos!"})
-        return render(request,'inscripcion_ifts18/login.html',{'error':"No ha introducido una cuenta de correo!"})
-    return render(request,'inscripcion_ifts18/login.html',{'error':"Error técnico, favor de comunicarse con juan.eiriz@alu.ifts18.edu.com"})
+        if request.user.is_authenticated:
+            return HttpResponse('true')
+        # password = request.POST.get('password')
+        # if Usuario.objects.filter(mail=mail,password=password).exists():
+        #     usuario = Usuario.objects.get(mail=mail)
+        #     if Alumno.objects.filter(id_usuario=usuario.id).exists():
+        #         alumno = Alumno.objects.get(id_usuario=usuario.id)
+        #         request.session['id_alumno'] = alumno.id
+        #         request.session['nombre'] = alumno.nombre
+        #         return render(request,'inscripcion_ifts18/alumno/index.html',{'nombre':alumno.nombre})
+        #     # chequear si es directivo
+        #     elif Directivo.objects.filter(id_usuario=usuario.id).exists():
+        #         directivo = Directivo.objects.get(id_usuario=usuario.id)
+        #         request.session['id_directivo'] = directivo.id
+        #         request.session['nombre'] = directivo.nombre
+        #         return render(request,'inscripcion_ifts18/directivo/index.html',{'nombre':directivo.nombre})
+        else:
+            return HttpResponse('false')
+        # return render(request,'registration/login.html',{'error':"El correo o la contraseña son incorrectos!"})
+    return render(request,'registration/login.html',{'error':"Error técnico, favor de comunicarse con juan.eiriz@alu.ifts18.edu.com"})
 
 def reset(request):
     return render(request, 'inscripcion_ifts18/reset.html')
