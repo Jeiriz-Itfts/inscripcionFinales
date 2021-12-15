@@ -20,7 +20,11 @@
         <strong>¡Inscripción realizada correctamente!</strong>
     </div>
     {% endif %}
-    <br><br>
+  {% if error %}
+    <div class="alert alert-warning" role="alert">
+        <strong>{{ error }}</strong> 
+      </div>
+    {% endif %}
   {% if not materias  %}
   <div class="alert alert-warning" role="alert">
     <strong>¡No existen materias para inscribirse!</strong>

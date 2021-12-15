@@ -124,13 +124,14 @@ def eliminarInscripcion(request, id):
 def inscripcion(request):
     materias = Materia.objects.all()    
     return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'materias': materias})
+
 @login_required
 def inscribir(request,id):
     materias = Materia.objects.all()
     materia = Materia.objects.get(pk=id)
     id_usuario = request.user.id
     usuario = User.objects.get(id=id_usuario)
-    if MateriaAlumno.objects.filter(id_materia=id).exists():
+    if MateriaAlumno.objects.filter(id_materia=materia, user=usuario).exists():
         return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'error': 'Ya esta inscripto a esa materia', 'materias': materias})
     else:
         inscripcion = MateriaAlumno.objects.create(id_materia=materia,user=usuario, fecha_inscripcion=timezone.now())

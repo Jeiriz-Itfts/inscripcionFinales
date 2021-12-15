@@ -21,6 +21,11 @@
 <div class="alert alert-warning" role="alert">
     <strong>{{error}}</strong>
 </div>
+{% endif %}
+{% if not inscripciones %}
+<div class="alert alert-warning" role="alert">
+    <strong>¡No existen inscripciones!</strong>
+</div>
 {% else %}
 <br><br>
 <table class="table table-striped">
