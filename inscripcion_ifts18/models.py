@@ -18,7 +18,7 @@ class Materia(models.Model):
     descripcion = models.CharField(max_length=200,  unique=True)
 
 class MateriaAlumno(models.Model):
-    id_materia = models.OneToOneField('Materia', on_delete=models.CASCADE)
+    id_materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     fecha_inscripcion = models.DateTimeField('Fecha inscripción')
     

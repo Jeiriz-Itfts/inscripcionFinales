@@ -16,7 +16,7 @@ body{
 margin-top:-5%!important;
 }
 .anclas{
-  text-align: center;
+  display:flex;
 }
 
 .anclas a{

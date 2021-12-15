@@ -21,15 +21,18 @@ from django.utils.decorators import method_decorator
 from rest_framework.viewsets import ModelViewSet   
 from django.contrib.auth.decorators import login_required
 
+
 def index(request):
     return render(request, 'inscripcion_ifts18/index.html')
 
 # directivo
+@login_required
 def curso_materia(request):
     materias = Materia.objects.all()
     cursos = Curso.objects.all()
-    return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'materias': materias, 'cursos': cursos})
+    return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'cursos': cursos,'materias': materias, })
 
+@login_required
 def crearCurso(request):
     materias = Materia.objects.all()
     cursos = Curso.objects.all()
@@ -38,14 +41,14 @@ def crearCurso(request):
         nombreCurso = request.POST['nombreCurso']
         # chequear si el curso ya esta creado
         if Curso.objects.filter(descripcion=nombreCurso).exists():
-            return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "El curso ya está creado!", 'materias': materias,'cursos': cursos})
+            return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "El curso ya está creado!", 'cursos': cursos,'materias': materias})
         curso = Curso.objects.create(descripcion=nombreCurso)
         if curso:
             agregacionCorrecta = True
             return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'agregacionCorrecta':agregacionCorrecta, 'cursos': cursos, 'materias': materias})
-        return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "No se pudo crear el curso", 'materias': materias,'cursos': cursos})
+        return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "No se pudo crear el curso",'cursos': cursos, 'materias': materias})
     return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "Error formulario", 'cursos': cursos,'materias': materias})
-
+@login_required
 def crearMateria(request):
     materias = Materia.objects.all()
     cursos = Curso.objects.all()
@@ -56,59 +59,84 @@ def crearMateria(request):
         nombreMateria = request.POST['nombreMateria']
         curso = Curso.objects.get(descripcion=nombreCurso)
         if Materia.objects.filter(descripcion=nombreMateria, id_curso=curso).exists():
-            return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "Ya existe una materia asociado a ese curso!", 'materias': materias,'cursos': cursos})
+            return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "Ya existe una materia asociado a ese curso!",'cursos': cursos, 'materias': materias})
+        if Materia.objects.filter(descripcion=nombreMateria).exists():
+            return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "Ya existe una materia con ese nombre!",'cursos': cursos, 'materias': materias})
         else:
             materia = Materia.objects.create(descripcion=nombreMateria, id_curso=curso)
             if materia:
                 agregacionCorrecta = True
                 return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'agregacionCorrecta':agregacionCorrecta, 'cursos': cursos, 'materias': materias})
             else:
-                return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "No se pudo crear la materia", 'materias': materias,'cursos': cursos})
+                return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "No se pudo crear la materia", 'cursos': cursos,'materias': materias})
     return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "Error formulario", 'cursos': cursos,'materias': materias})
-
+@login_required
 def eliminarCurso(request, id):
     materias = Materia.objects.all()
     cursos = Curso.objects.all()
     if Curso.objects.filter(id=id).delete():
         eliminacionCorrecta = True
         return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'eliminacionCorrecta':eliminacionCorrecta, 'cursos': cursos, 'materias': materias})
-    return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "No se pudo eliminar el curso", 'materias': materias, 'cursos': cursos})
-    
+    return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "No se pudo eliminar el curso",'cursos': cursos, 'materias': materias})
+@login_required   
+def eliminarMateria(request, id):
+    materias = Materia.objects.all()
+    cursos = Curso.objects.all()
+    if Materia.objects.filter(id=id).delete():
+        eliminacionCorrecta = True
+        return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'eliminacionCorrecta':eliminacionCorrecta, 'cursos': cursos, 'materias': materias})
+    return render(request,'inscripcion_ifts18/directivo/curso_materia.html', {'error': "No se pudo eliminar la materia",  'cursos': cursos,'materias': materias})
+@login_required
+def verInscripcionesDirectivo(request):
+    inscripciones = MateriaAlumno.objects.all()
+    return render(request,'inscripcion_ifts18/directivo/ver_inscripciones.html', {'inscripciones': inscripciones})
 
 # alumno
+@login_required
 def verInscripciones(request):
 # obtener id de usuario logueado
     id_usuario = request.user.id
-    usuario = User.objects.get(id=id_usuario)
-    inscripciones = MateriaAlumno.objects.filter(user=usuario)
-    return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'inscripciones': inscripciones})
+    try: 
+        usuario = User.objects.get(pk=id_usuario)
+        if usuario:
+            inscripciones = MateriaAlumno.objects.filter(user=usuario)
+            if inscripciones:
+                return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'inscripciones': inscripciones})
+            return render(request,'inscripcion_ifts18/alumno/inscripciones.html',  {'inscripciones': inscripciones})
+        return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'error': "No existe usuario con ese id"})
+    except User.DoesNotExist:
+        return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'error': "No existe usuario con ese id"})
 
 
+@login_required
 def eliminarInscripcion(request, id):
     id_usuario = request.user.id
     usuario = User.objects.get(id=id_usuario)
-    materia = Materia.objects.get(id=id)
-    if MateriaAlumno.objects.filter(user=usuario, id_materia=id).exists():
-        if MateriaAlumno.objects.filter(user=usuario, id_materia=id).delete():
+    inscripciones = MateriaAlumno.objects.filter(user=usuario)
+    if MateriaAlumno.objects.filter(pk=id).exists():
+        if MateriaAlumno.objects.filter(pk=id).delete():
             eliminacionCorrecta = True
-            inscripciones = MateriaAlumno.objects.filter(user=usuario)
-    return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'eliminacionCorrecta': eliminacionCorrecta,'inscripciones':inscripciones})
+            return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'eliminacionCorrecta': eliminacionCorrecta,'inscripciones':inscripciones})
+        return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'error': 'No se pudo eliminar','inscripciones':inscripciones}) 
+    return render(request,'inscripcion_ifts18/alumno/inscripciones.html', {'error':'No existe la inscripcion','inscripciones':inscripciones})       
 
-
+@login_required
 def inscripcion(request):
     materias = Materia.objects.all()    
     return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'materias': materias})
-
+@login_required
 def inscribir(request,id):
     materias = Materia.objects.all()
-    materia = Materia.objects.get(id=id)
+    materia = Materia.objects.get(pk=id)
     id_usuario = request.user.id
     usuario = User.objects.get(id=id_usuario)
-    if MateriaAlumno.objects.filter(user=usuario, id_materia=materia).exists():
+    if MateriaAlumno.objects.filter(id_materia=id).exists():
         return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'error': 'Ya esta inscripto a esa materia', 'materias': materias})
     else:
-        inscripcion = MateriaAlumno.objects.create(user=usuario, id_materia=materia, fecha_inscripcion=timezone.now())
-        return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'inscripcion': inscripcion, 'materias': materias})
+        inscripcion = MateriaAlumno.objects.create(id_materia=materia,user=usuario, fecha_inscripcion=timezone.now())
+        if inscripcion:
+            inscripcionCorrecta = True
+            return render(request,'inscripcion_ifts18/alumno/inscripcion.html', {'inscripcionCorrecta': inscripcionCorrecta, 'materias': materias})
 
 
 # # Directivos

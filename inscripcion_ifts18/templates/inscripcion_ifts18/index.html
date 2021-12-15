@@ -1,1 +1,22 @@
 {% extends "inscripcion_ifts18/base.html" %}
+
+{% block nav %}
+{% block comment %}
+<div class="anclas">
+    <a href="{% url 'inscripcion_ifts18:inscripcion' %}">Inscripción</a>
+    <a href="{% url 'inscripcion_ifts18:curso_materia' %}"> (directivo) ABM cursos y materias</a>
+    <a href="{% url 'inscripcion_ifts18:verInscripcionesDirectivo' %}"> (directivo)Ver inscripciones de los alumnos</a>
+    <a href="{% url 'inscripcion_ifts18:verInscripciones' %}">Ver inscripciones</a>
+  </div>
+  <hr>
+  {% endblock %}
+  {% endblock %}
+
+  {% block body %}
+  <h3>Bienvenido, {{ user.username.upper }}</h2>
+  <br><br>
+  <br><br>
+
+  {% endblock %}
+      
+  

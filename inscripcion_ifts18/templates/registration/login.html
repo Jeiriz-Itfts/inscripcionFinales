@@ -2,14 +2,16 @@
 
 
 {% block body %}
+{% if not user.is_authenticated %}
+<div class="alert alert-warning" role="alert">
+  <strong>¡No estás logueado!</strong>
+</div>
+{% endif %}
 <h2>Iniciar sesión</h2>
-<br><br><br>
+<br>
 <p>Coloque su DNI o su mail institucional, su contraseña y luego inicie sesión</p>
-<br>
-<br>
 <div class="wrapper fadeInDown">
-    <br>
-    <br>
+
     <div id="formContent">
 
         <div class="fadeIn first">

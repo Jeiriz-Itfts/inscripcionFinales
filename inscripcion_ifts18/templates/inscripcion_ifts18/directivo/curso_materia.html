@@ -2,8 +2,11 @@
 
 {% block nav %}
 <div class="anclas">
-    <hr>
-</div>
+    <a href="{% url 'inscripcion_ifts18:inscripcion' %}">Inscribir</a>
+    <a href="{% url 'inscripcion_ifts18:verInscripcionesDirectivo' %}"> (directivo) Ver inscripciones de los alumnos</a>
+    <a href="{% url 'inscripcion_ifts18:verInscripciones' %}">Ver mis inscripciones</a>
+  </div>
+  <hr>
 {% endblock %}
 {% block body %}
 {% if error %}
@@ -89,7 +92,7 @@
                             <td>{{ materia.descripcion }}</td>
                             <td>{{ materia.id_curso.descripcion }}</td>
                             <td>
-                                <a class="btn-link" href="">
+                                <a class="btn-link" href="{% url 'inscripcion_ifts18:eliminarMateria' materia.id %}">
                                     <button type="button" class="btn btn-primary">Eliminar</button>
                                 </a>
                             </td>

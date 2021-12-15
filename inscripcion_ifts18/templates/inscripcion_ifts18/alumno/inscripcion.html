@@ -2,9 +2,11 @@
 
 {% block nav %}
 <div class="anclas">
-<a href="{% url 'inscripcion_ifts18:verInscripciones' %}">Ver inscripciones</a>
-<hr>
+  <a href="{% url 'inscripcion_ifts18:verInscripciones' %}">Ver inscripciones</a>
+  <a href="{% url 'inscripcion_ifts18:curso_materia' %}">ABM cursos y materias</a>
+  <a href="{% url 'inscripcion_ifts18:verInscripcionesDirectivo' %}">Ver inscripciones de los alumnos</a>
 </div>
+<hr>
 
 {% endblock %}
 
@@ -13,17 +15,17 @@
 <p>Selecciona la materia a la que te gustaría inscribirte</p>
 <br><br>
 <br><br>
-<!-- si se inscribió correctamente, mostrar alerta satisfactoria -->
-{% if inscripcion %}
+{% if inscripcionCorrecta  %}
     <div class="alert alert-success" role="alert">
         <strong>¡Inscripción realizada correctamente!</strong>
     </div>
     {% endif %}
-  {% if error %}
-    <div class="alert alert-danger" role="alert">
-      {{ error }}
-    </div>
-  {% endif %}
+    <br><br>
+  {% if not materias  %}
+  <div class="alert alert-warning" role="alert">
+    <strong>¡No existen materias para inscribirse!</strong>
+</div>
+{% else %}
   <br><br>
 <table class="table table-striped">
   <tbody>
@@ -35,7 +37,6 @@
       </tr>
     </thead>
 
-      <!-- show materias in the table -->
       {% for materia in materias %}
       <tr>
         <td>{{ materia.descripcion}}</td>
@@ -49,6 +50,6 @@
 
     </tbody>
   </table>
-  
+  {% endif %}
 {% endblock %}
     
