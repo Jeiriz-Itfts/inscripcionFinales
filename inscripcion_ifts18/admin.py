@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Administradores, Rol,Permiso,Usuario,Directivo,Curso,Alumno,Materia,MateriaAlumno
+from .models import Curso,Materia,MateriaAlumno
 # Register your models here.
 #Poner el modelo aca permite que se edita en el panel de ADMIN
 # aca podes hacer que no aparezca ciertos campos seteados en models.py
@@ -31,13 +31,8 @@ from .models import Administradores, Rol,Permiso,Usuario,Directivo,Curso,Alumno,
 #     ]
 
 # esto permite agregar objetos a mano pero no es lo ideal
-admin.site.register(Usuario)
-admin.site.register(Rol)
-admin.site.register(Permiso)
-admin.site.register(Directivo)
-admin.site.register(Administradores)
+
 admin.site.register(Curso)
-admin.site.register(Alumno)
 admin.site.register(Materia)
 admin.site.register(MateriaAlumno)
 # ahora en admin se pueden ver todos los roles y permisos creados

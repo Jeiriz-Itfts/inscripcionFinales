@@ -1,0 +1,104 @@
+{% extends "inscripcion_ifts18/base.html" %}
+
+{% block nav %}
+<div class="anclas">
+    <hr>
+</div>
+{% endblock %}
+{% block body %}
+{% if error %}
+    <div class="alert alert-warning" role="alert">
+        <strong>
+            {{ error }}
+        </strong>
+    </div>
+{% endif %}
+{% if eliminacionCorrecta %}
+    <div class="alert alert-success" role="alert">
+        <strong>¡Se ha eliminado correctamente!</strong>
+    </div>
+{% endif %}
+{% if agregacionCorrecta %}
+    <div class="alert alert-success" role="alert">
+        <strong>¡Se ha agregado correctamente!</strong>
+    </div>
+{% endif %}
+<h3>ABM de cursos y materias</h2>
+    <br>
+    <p style="color:red"><strong><u>Atencion:</u> Si borra un curso, borrará las materias asociadas </strong></p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <h4>Cursos</h4>
+                <form action="{% url 'inscripcion_ifts18:crearCurso' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="nombreCurso" placeholder="Nombre del curso" class="form-control">
+                    <button type="submit" class="btn directivo btn-primary float-right"><span
+                        class="glyphicon glyphicon-plus-sign"></span>
+                </button>
+                </form>
+                <br>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for curso in cursos %}
+                        <tr>
+                            <td>{{ curso.descripcion }}</td>
+                            <td>
+                                <a class="btn-link" href="{% url 'inscripcion_ifts18:eliminarCurso' curso.id %}">
+                                    <button type="button" class="btn btn-primary">Eliminar</button>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-5">
+                <h4>Materias</h4>
+                <form action="{% url 'inscripcion_ifts18:crearMateria' %}" method="POST">{% csrf_token %}
+                    <select name="desplegableCursos" class="form-select" >
+                        <option selected> Seleccione un curso</option>
+                        {% for curso in cursos %}
+                        <option value="{{ curso.descripcion }}"> {{ curso.descripcion }}</option>
+                        {% endfor %}
+                      </select>
+                    <input type="text" name="nombreMateria" placeholder="Nombre de la materia" class="form-control">
+                    <button type="submit" class="btn directivo btn-primary float-right"><span
+                            class="glyphicon glyphicon-plus-sign"></span>
+                    </button>
+                    </a>
+                </form>
+                <br>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Curso perteneciente</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for materia in materias %}
+                        <tr>
+                            <td>{{ materia.descripcion }}</td>
+                            <td>{{ materia.id_curso.descripcion }}</td>
+                            <td>
+                                <a class="btn-link" href="">
+                                    <button type="button" class="btn btn-primary">Eliminar</button>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
