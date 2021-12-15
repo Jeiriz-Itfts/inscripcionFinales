@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     #     ruta(url) view(luego de la ruta, se dirige a la vista, podes pasarle argumentos) y dos argumentos iopcionales (kwargs[diccionario], name [nombre a la url] )
     path('admin/', admin.site.urls),
-    path('inscripcion_ifts18/', include('inscripcion_ifts18.urls')), #el include hace referencia a otras url
+    path('', include('inscripcion_ifts18.urls')), #el include hace referencia a otras url
+    path('',LoginView.as_view(),name='login'),
+    path('logout/',LogoutView.as_view(), name='logout'),
     
 ]

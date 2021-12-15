@@ -10,8 +10,6 @@ app_name = 'inscripcion_ifts18'
 
 # Buenas Practicas arquitectura restfull
 urlpatterns = [
-    path('',LoginView.as_view(),name='login'),
-    path('logout/',LogoutView.as_view(), name='logout'),
     path('index/',index, name='index'),
     path('alumno/inscripcion/',inscripcion, name='inscripcion'),
     path('alumno/inscripciones/',verInscripciones, name='verInscripciones'),
