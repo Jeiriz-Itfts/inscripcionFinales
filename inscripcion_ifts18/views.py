@@ -21,7 +21,7 @@ from django.utils.decorators import method_decorator
 from rest_framework.viewsets import ModelViewSet   
 from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def index(request):
     return render(request, 'inscripcion_ifts18/index.html')
 
