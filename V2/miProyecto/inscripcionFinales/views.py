@@ -1,11 +1,10 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.http.response import JsonResponse
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.utils import timezone
 from django.urls import reverse
-from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.template.context import RequestContext
 from django import forms
@@ -16,7 +15,9 @@ from django.template.loader import get_template
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMultiAlternatives
 
+# Antes usaba sesiones para saber si estaba logeado
 @login_required
 def index(request):
     return render(request, 'index.html')
@@ -135,6 +136,49 @@ def inscribir(request,id):
             inscripcionCorrecta = True
             return render(request,'alumno/inscripcion.html', {'inscripcionCorrecta': inscripcionCorrecta, 'materias': materias})
 
+# Envio de emails y reseteo de pass
+def reset(request):
+    return render(request, 'reset.html')
+
+def sendMail(email,newPassword, usuario):
+    context = {'newPassword': newPassword, 'usuario': usuario}
+
+    template = get_template('correo.html')
+    content = template.render(context) #esto hace que sea dinamico y pasarle un valor que permite utilizar en el template, esa vairable, ese valor que le paso
+    
+    correo = EmailMultiAlternatives(
+                'IFTS 18 - Reseteo automático de contraseña',
+                'Prueba',
+                settings.EMAIL_HOST_USER,
+                [email]
+                )
+    correo.attach_alternative(content, 'text/html') #atach el correo en el template html y el formato
+    correo.send() #envia correo
+        
+def checkMailSendPass(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if email:
+            #hacer que no se puedan ingresar usuarios duplicados
+            # Usuario.objects.filter(mail=mail).exists()
+            if User.objects.filter(email=email).exists():
+                usuario = User.objects.get(email=email)
+                # existe funcion para resetear la contraseña propia de django
+                newPassword = str(uuid.uuid4())
+                usuario.set_password(newPassword)
+                usuario.save()
+                try:
+                    sendMail(email,newPassword, usuario)
+                    return render(request, 'reset.html', {'success': True})
+                except Exception as e:
+                    return render(request, 'reset.html', {'error': 'No se pudo enviar el correo!'})
+            else:
+                return render(request, 'reset.html', {'error': 'No existe usuario con ese mail'})
+        else:
+            return render(request, 'reset.html', {'error': 'No se ingreso mail'})
+    else:
+        return render(request, 'reset.html',{'error': 'Error, contactarse con soporte.'})
+
 
 # # Directivos
 #     # vista de index
@@ -181,74 +225,30 @@ def inscribir(request,id):
 #     return render(request,'directivo/abm/alumnos.html',{'cursos':cursos, 'materias': materias})
 
 
-# #     def abmMaterias(request):
 
-    
-# #     def verCursos(request):
+# """ All """
+# def chequearSiEsUsuario(request):
+#     if request.method == 'POST':
+#         mail = request.POST.get('mail')
+#         if mail:
+#             password = request.POST.get('password')
+#             if Usuario.objects.filter(mail=mail,password=password).exists():
+#                 usuario = Usuario.objects.get(mail=mail)
+#                 if Alumno.objects.filter(id_usuario=usuario.id).exists():
+#                     alumno = Alumno.objects.get(id_usuario=usuario.id)
+#                     request.session['id_alumno'] = alumno.id
+#                     request.session['nombre'] = alumno.nombre
+#                     return render(request,'alumno/index.html',{'nombre':alumno.nombre})
+#                 # chequear si es directivo
+#                 elif Directivo.objects.filter(id_usuario=usuario.id).exists():
+#                     directivo = Directivo.objects.get(id_usuario=usuario.id)
+#                     request.session['id_directivo'] = directivo.id
+#                     request.session['nombre'] = directivo.nombre
+#                     return render(request,'directivo/index.html',{'nombre':directivo.nombre})
+#             return render(request,'login.html',{'error':"El correo o la contraseña son incorrectos!"})
+#         return render(request,'login.html',{'error':"No ha introducido una cuenta de correo!"})
+#     return render(request,'login.html',{'error':"Error técnico, favor de comunicarse con juan.eiriz@alu.ifts18.edu.com"})
 
-# #     def verMaterias(request):
-
-
-
-# # # """ All """
-# # def chequearSiEsUsuario(request):
-# #     if request.method == 'POST':
-# #         mail = request.POST.get('mail')
-# #         if mail:
-# #             password = request.POST.get('password')
-# #             if Usuario.objects.filter(mail=mail,password=password).exists():
-# #                 usuario = Usuario.objects.get(mail=mail)
-# #                 if Alumno.objects.filter(id_usuario=usuario.id).exists():
-# #                     alumno = Alumno.objects.get(id_usuario=usuario.id)
-# #                     request.session['id_alumno'] = alumno.id
-# #                     request.session['nombre'] = alumno.nombre
-# #                     return render(request,'alumno/index.html',{'nombre':alumno.nombre})
-# #                 # chequear si es directivo
-# #                 elif Directivo.objects.filter(id_usuario=usuario.id).exists():
-# #                     directivo = Directivo.objects.get(id_usuario=usuario.id)
-# #                     request.session['id_directivo'] = directivo.id
-# #                     request.session['nombre'] = directivo.nombre
-# #                     return render(request,'directivo/index.html',{'nombre':directivo.nombre})
-# #             return render(request,'login.html',{'error':"El correo o la contraseña son incorrectos!"})
-# #         return render(request,'login.html',{'error':"No ha introducido una cuenta de correo!"})
-# #     return render(request,'login.html',{'error':"Error técnico, favor de comunicarse con juan.eiriz@alu.ifts18.edu.com"})
-
-# # def reset(request):
-# #     return render(request, 'reset.html')
-
-# # def sendMail(self, mail, newPassword):
-# #     context = {'newPassword': newPassword}
-# #     template = get_template('correo.html')
-# #     content = template.render(context) #esto hace que sea dinamico y pasarle un valor que permite utilizar en el template, esa vairable, ese valor que le paso
-# #     email = EmailMultiAlternatives(
-# #                 'IFTS 18 - Reseteo automático de contraseña',
-# #                 settings.EMAIL_HOST_USER,
-# #                 [mail]
-# #                 )
-# #     email.attach_alternative(content, "text/html") #atach el correo en el template html y el formato
-# #     try:
-# #         email.send() #envia correo
-# #     except:
-# #         return HttpResponse("Error al enviar correo")
-        
-# # def chequearSiMailExisteYEnviarMail(self, request):
-# #     if request.method == 'POST':
-# #         mail = request.POST.get('mail')
-# #         if mail:
-# #             try:
-# #                 #hacer que no se puedan ingresar usuarios duplicados
-# #                 Usuario.objects.filter(mail=mail).exists()
-# #                 usuario = Usuario.objects.get(mail=mail)
-# #                 if usuario.mail:
-# #                     newPassword = str(uuid.uuid4())
-# #                     usuario.password = newPassword
-# #                     usuario.save()
-# #                     self.sendMail(mail, newPassword)
-# #                     return render(request, 'reseteado.html')
-# #             except Usuario.DoesNotExist:
-# #                 return HttpResponse("El correo no se encuentra registrado!")
-# #         return HttpResponse("No se ha introducido ningún correo")
-# #     return render(request, 'reset.html')
 
 
 # # """ API """

@@ -1,15 +1,10 @@
-{% extends "base"base.html" %}
+{% extends "base.html" %}
 
 {% block body %}
 {% if not user.is_authenticated %}
 <div class="alert alert-warning" role="alert">
   <strong>¡No estás logueado!</strong>
 </div>
-{% endif %}
-{% if form.errors %}
-<div class="alert alert-warning" role="alert">
-    <strong>{{form.errors}}</strong>
-  </div>
 {% endif %}
 <h2>Iniciar sesión</h2>
 <br><br>
@@ -32,14 +27,14 @@
             <input type="submit" class="fadeIn fourth" value="Iniciar sesión" class="btn btn-primary" />
         </form>
         <div id="formFooter">
-            <a class="underlineHover" href="reset">Restablecer contraseña</a>
+            <a class="underlineHover" href="{% url 'reset' %}">Restablecer contraseña</a>
           </div>
     </div>
     <br><br>
-    {% if error %}
-    <div class="alert alert-danger">
-        <strong>{{error}}</strong>
-    </div>
+    {% if form.errors %}
+    <div class="alert alert-warning" role="alert">
+        <strong>{{form.errors}}</strong>
+      </div>
+    {% endif %}
 </div>
-{% endif %}
 {% endblock %}

@@ -1,11 +1,24 @@
 {% extends "base.html" %}
 
 {% block body %}
+<br><br><br><br>
 <h2>Restablecer contraseña</h2> 
-<p>Ingrese su dni o correo institucional para obtener la contraseña vía mail</p>
-
-<form action="{% url ' chequearSiMailExisteYEnviarMail' %}" method="POST">{% csrf_token %}
-    <input type="email" name="mail" id="mail" placeholder="juan.eiriz@alu.ifts18.edu.ar" required><br><br>
+<br><br>
+<p>Ingrese su correo institucional para obtener la contraseña vía mail</p>
+<br><br><br><br>
+<form action="{% url 'checkMailSendPass' %}" method="POST">{% csrf_token %}
+    <input type="email" name="email" id="email" placeholder="juan.eiriz@alu.ifts18.edu.ar" required><br><br>
     <input type="submit" value="Enviar contraseña" class="btn btn-primary" />
 </form>
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{ error }}
+</div>
+{% endif %}
+{% if success %}
+<br><br>
+<div class="alert alert-success" role="alert">
+    <strong>Se ha restablecido la contraseña correctamente!</strong>
+</div>
+{% endif %}
 {% endblock %}
