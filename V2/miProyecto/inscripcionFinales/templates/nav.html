@@ -1,0 +1,7 @@
+{% load static %}
+<a href=""><img src="{% static 'ifts.jpg' %}" alt="" width="70px"></a>
+<h1 class="titulo">Sistema de inscripción a finales </h1>
+{% if request.user.is_authenticated %}
+<a href="{% url 'LogoutView' %}">Cerrar sesión</a>
+{% endif %}
+<hr>

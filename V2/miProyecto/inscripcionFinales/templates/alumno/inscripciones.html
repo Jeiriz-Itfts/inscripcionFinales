@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block nav %}
+<div class="anclas">
+    <a href="{% url 'inscripcion' %}">Inscripción</a>
+    <a href="{% url 'curso_materia' %}"> (directivo) ABM cursos y materias</a>
+    <a href="{% url 'verInscripcionesDirectivo' %}"> (directivo)Ver inscripciones de los alumnos</a>
+  </div>
+  <hr>
+    {% endblock %}
+{% block body %}
+<h3>Inscripciones realizadas</h2>
+{% if eliminacionCorrecta %}
+    <div class="alert alert-success" role="alert">
+        <strong>¡Eliminación correcta!</strong>
+    </div>
+    {% endif %}
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
+  {% endif %}
+{% if not inscripciones %}
+<div class="alert alert-warning" role="alert">
+    <strong>¡No existen inscripciones!</strong>
+</div>
+{% else %}
+<br><br>
+<table class="table table-striped">
+<tbody>
+    <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Año</th>
+          <th scope="col">Fecha de inscripción</th>
+          <th scope="col">Accion</th>
+        </tr>
+      </thead>
+
+    {% for inscripcion in inscripciones %}
+    <tr>
+      <td>{{ inscripcion.id_materia.descripcion}}</td>
+      <td>{{ inscripcion.id_materia.id_curso.descripcion}}</td>
+      <td>{{ inscripcion.fecha_inscripcion}}</td>
+      <td>
+        <a class="btn-link" href="{% url 'eliminarInscripcion' inscripcion.id %}">
+            <button type="button" class="btn btn-primary">Eliminar</button>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endif %}
+{% endblock %}

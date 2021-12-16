@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block body %}
+<h2>Restablecer contraseña</h2> 
+<p>Ingrese su dni o correo institucional para obtener la contraseña vía mail</p>
+
+<form action="{% url ' chequearSiMailExisteYEnviarMail' %}" method="POST">{% csrf_token %}
+    <input type="email" name="mail" id="mail" placeholder="juan.eiriz@alu.ifts18.edu.ar" required><br><br>
+    <input type="submit" value="Enviar contraseña" class="btn btn-primary" />
+</form>
+{% endblock %}

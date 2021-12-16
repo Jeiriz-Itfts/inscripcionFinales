@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block nav %}
+<div class="anclas">
+  <a href="{% url 'inscripcion' %}">Inscribir</a>
+  <a href="{% url 'curso_materia' %}">(directivo) ABM cursos y materias</a>
+  <a href="{% url 'verInscripciones' %}">Ver mis inscripciones</a>
+</div>
+<hr>
+    {% endblock %}
+{% block body %}
+<h3>Inscripciones realizadas por los alumnos</h2>
+{% if eliminacionCorrecta %}
+    <div class="alert alert-success" role="alert">
+        <strong>¡Eliminación correcta!</strong>
+    </div>
+    {% endif %}
+{% if error %}
+<div class="alert alert-warning" role="alert">
+    <strong>{{error}}</strong>
+</div>
+{% endif %}
+{% if not inscripciones %}
+<div class="alert alert-warning" role="alert">
+    <strong>¡No existen inscripciones!</strong>
+</div>
+{% else %}
+<br><br>
+<table class="table table-striped">
+<tbody>
+    <thead>
+        <tr>
+          <th scope="col">Materia</th>
+          <th scope="col">Año</th>
+          <th scope="col">Alumno</th>
+          <th scope="col">Fecha de inscripción</th>
+          <th scope="col">Accion</th>
+        </tr>
+      </thead>
+      <!-- si no existen inscripciones, mostrar una alerta diciendo que no existen inscripciones -->
+    
+    {% for inscripcion in inscripciones %}
+    <tr>
+      <td>{{ inscripcion.id_materia.descripcion}}</td>
+      <td>{{ inscripcion.id_materia.id_curso.descripcion}}</td>
+      <td>{{ inscripcion.user}}</td>
+      <td>{{ inscripcion.fecha_inscripcion}}</td>
+      <td>
+        <a class="btn-link" href="{% url 'eliminarInscripcion' inscripcion.id %}">
+            <button type="button" class="btn btn-primary">Eliminar</button>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+</tbody>
+</table>
+{% endblock %}
